@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Glitzy</title>
+    <link rel="stylesheet" 
+    	  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+   	<link rel="stylesheet"
+		href="bootstrap-styles.css">
+
+</head>
+
+<body>
+
+	<!-- Static navbar -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button"
+                        class="navbar-toggle collapsed"
+                        data-toggle="collapse"
+                        data-target="#navbar"
+                        aria-expanded="false"
+                        aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Glitzy</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+               
+                <ul class="nav navbar-nav navbar-right">
+                	<li data-toggle="modal"
+						data-target=".bs-example-modal-sm"><a href="#">Home</a></li>
+                    <li data-toggle="modal"
+                        data-target=".bs-example-modal-sm"><a href="#">Login</a></li>
+                	<li class="dropdown">
+                        <a href="#"
+                           class="dropdown-toggle"
+                           data-toggle="dropdown"
+                           role="button"
+                           aria-expanded="false">
+                            Your Account <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li class="divider"></li>
+                            <li class="dropdown-header">Your Settings</li>
+                            <li><a href="#">Settings</a></li>
+                            <li><a href="#">Profile</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+	<!-- Modal Window -->
+
+	<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+	  <div class="modal-dialog modal-sm">
+		    <div class="modal-content">
+		      <form id="login">
+				  <div class="form-group">
+				    <label class="sr-only" for="exampleInputEmail3">Email address</label>
+				    <input type="email" class="form-control" id="email" placeholder="Email">
+				  </div>
+				  <div class="form-group">
+				    <label class="sr-only" for="exampleInputPassword3">Password</label>
+				    <input type="password" class="form-control" id="password" placeholder="Password">
+				  </div>
+				  <button type="submit" class="btn btn-default">Log in</button>
+				</form>
+		    </div>
+	  	</div>
+	</div>
+
+	<!-- Body of Page -->
+
+
+<!-- You need this in order to use JS-based components in the 
+further study. Leave this at the bottom and code above it. -->
+
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
