@@ -15,7 +15,7 @@ from werkzeug.utils import secure_filename
 UPLOAD_FOLDER = 'glitz'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'img'])
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder = "glitz")
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
@@ -177,13 +177,22 @@ def upload_glitz():
             # Save to DB
             save_glitz_data(path=path_to_save_file, user_id=session["user_id"], 
                 title='yeah!')
-            # upload.save(path_to_save_file)
 
-            # return redirect("homepage.html", image_name=filename)
+            # Insert the path in session
+            session["glitz_path"] = path_to_save_file
 
-            return redirect("/")
+            return redirect("/view_glitz")
+            # return render_template("view_glitz.html", file_path=path_to_save_file)
 
     return redirect("/")
+
+
+# Make new route and new def for that route
+@app.route('/view_glitz')
+def view_glitz():
+    glitz_path = session["glitz_path"] 
+
+    return render_template("view_glitz.html", file_path=glitz_path)
 
 
 # @app.route('/show/<filename>')
