@@ -1,0 +1,3 @@
+1. Remove glith_path from the session and instead call glitz_id in the url. 
+   This way we can use same page for multiple glitz id.
+   

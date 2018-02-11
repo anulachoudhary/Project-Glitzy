@@ -1,14 +1,18 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-  <title>Glitzy</title>
-</head>
-
-<body>
-  Glitzy
-  <hr>
-
-  {% block content %} put your content here {% endblock %}
-
-</body>
+    <head>
+        {% block title %}
+            <title>
+                Glitzy
+            </title>
+        {% endblock %}
+        
+        <link rel="stylesheet" type="text/css" href="/static/styles.css">
+    </head>
+    
+    <body>
+        {% block content %} 
+            Class tamplate content goes here.
+        {% endblock %}
+    </body>
 </html>

@@ -1,6 +1,7 @@
-"""Models and database functions for Glitzy project."""
-
+"""Models and database functions for glitzy project."""
+import datetime
 from flask_sqlalchemy import SQLAlchemy
+
 
 # This is the connection to the PostgreSQL database; we're getting
 # this through the Flask-SQLAlchemy helper library. On this, we can
@@ -110,12 +111,14 @@ class Comment(db.Model):
                           autoincrement=True,
                           primary_key=True)
     glitz_id = db.Column(db.Integer,
-                         db.ForeignKey('glitzes.glitz_id'), 
-                         nullable=False)
+                         db.ForeignKey('glitzes.glitz_id'))
     grid_id = db.Column(db.Integer, db.ForeignKey('grids.grid_id'), 
                         nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), 
+                        nullable=False)
     comment_text = db.Column(db.Text, nullable=False)
-    commented_on = db.Column(db.DateTime, nullable=False)
+    commented_on = db.Column(db.DateTime, nullable=False, 
+                             default=datetime.datetime.now)
 
     # Define relationship to glitz
     glitz = db.relationship("Glitz",
@@ -124,6 +127,9 @@ class Comment(db.Model):
 
     # Define relationship to grid
     grid = db.relationship("Grid", backref="comments")
+
+    # Define relationship to user
+    user = db.relationship("User", backref="comments")
 
 
     def __repr__(self):

@@ -1,7 +1,8 @@
 """Glitzy"""
 import os
-import hashlib
+
 import datetime
+from functions import * 
 
 from jinja2 import StrictUndefined
 
@@ -13,7 +14,6 @@ from model import connect_to_db, db, User, Login, Glitz, Grid, Comment
 from werkzeug.utils import secure_filename
 
 UPLOAD_FOLDER = 'glitz'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'img'])
 
 app = Flask(__name__, static_folder = "glitz")
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -27,19 +27,12 @@ app.secret_key = "ABC"
 app.jinja_env.undefined = StrictUndefined
 
 
-def encrypt_password(password):
-    # encrypt password sent by user 
-    h = hashlib.md5(password.encode())
-    encrypted_password = h.hexdigest()
-    
-    return encrypted_password    
-
 
 @app.route('/')
 def index():
-    """Homepage."""
+    """Profile page."""
 
-    return render_template("homepage.html")
+    return render_template("profile.html")
 
 
 @app.route('/register', methods=['GET'])
@@ -76,13 +69,12 @@ def register_process():
     # flash("User %s added." % email)
     return redirect("/%s" % new_user.user_id)
 
-
 @app.route("/<int:user_id>")
 def user_detail(user_id):
     """Show info about user."""
 
     user = User.query.options(db.joinedload('logins')).get(user_id)
-    return render_template("homepage.html", user=user)
+    return render_template("profile.html", user=user)
 
 
 
@@ -128,24 +120,6 @@ def logout():
     flash("Logged Out.")
     return redirect("/")
 
-"""
-Check for specific allowed file extensions
-"""
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
-def save_glitz_data(path, user_id, title):
-    # Save glitz to DB
-    now = datetime.datetime.now()
-    glitz = Glitz(glitz_path=path, user_id=user_id, posted_on=now, title=title)
-
-    db.session.add(glitz)
-    db.session.commit()
-
-
-
 @app.route('/upload_glitz', methods=['POST'])
 def upload_glitz():
     """Upload Glitz."""
@@ -175,36 +149,45 @@ def upload_glitz():
             file.save(path_to_save_file)
 
             # Save to DB
-            save_glitz_data(path=path_to_save_file, user_id=session["user_id"], 
-                title='yeah!')
+            glitz_id = save_glitz_data(path=path_to_save_file, 
+                                    user_id=session["user_id"], title='yeah!')
 
-            # Insert the path in session
-            session["glitz_path"] = path_to_save_file
-
-            return redirect("/view_glitz")
-            # return render_template("view_glitz.html", file_path=path_to_save_file)
+            return redirect("/view_glitz/" + str(glitz_id))
+            # return render_templatew_glitz.html", file_path=path_to_save_file)
 
     return redirect("/")
 
 
 # Make new route and new def for that route
-@app.route('/view_glitz')
-def view_glitz():
-    glitz_path = session["glitz_path"] 
+@app.route('/view_glitz/<int:glitz_id>')
+def view_glitz(glitz_id):
+    # Using glitz_id, we need to fetch glitz data from DB
+    glitz = Glitz.query.get(glitz_id)
+    grids = Grid.query.all()
+    
+    return render_template("view_glitz.html", 
+                            file_path="../" + glitz.glitz_path,
+                            grids=grids,
+                            glitz_id=glitz_id)
 
-    return render_template("view_glitz.html", file_path=glitz_path)
 
+@app.route('/save_comment', methods=['POST'])
+def save_comment():
+    # Get user_id from session 
+    user_id = session["user_id"]
+    
+    # Get form variables
+    comment = request.form["comment"]
+    grid_id = request.form["grids"]
+    glitz_id = request.form["glitz_id"]
 
-# @app.route('/show/<filename>')
-# def uploaded_glitz(filename):
-#     filename = 'http://127.0.0.1:5000/uploads/' + filename
-#     return render_template('/', filename=filename)
+    # save the comment on db
+    comment_id = save_comment_data(glitz_id, user_id, grid_id, comment)
 
+    # We need to pass in glitz_id, grid_id and comment_text from HTML form
+    print comment_id
 
-# @app.route('/uploads/<filename>')
-# def send_glitz(filename):
-#     return send_from_directory(UPLOAD_FOLDER, filename)
-
+    return redirect("/")
 
 
 if __name__ == "__main__":
@@ -220,3 +203,4 @@ if __name__ == "__main__":
     DebugToolbarExtension(app)
 
     app.run(host="0.0.0.0")
+ 

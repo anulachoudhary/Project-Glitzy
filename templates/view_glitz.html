@@ -4,12 +4,31 @@
     <title>View Glitz</title>
 </head>
 <body>
-<h1>View your Glitz!</h1>
+    <h1>View your Glitz!</h1>
 
-<img src="{{ file_path }}">
+    <img src="{{ file_path }}">
+
+    <form action="/save_comment" method="POST">
+
+        <input type="hidden" name="glitz_id" value="{{ glitz_id }}">
+
+        Comment: <textarea rows="4" cols="50" name="comment"></textarea><br>
+        
+        <select name='grids'>
+            {% for grid in grids %}
+              <option value="{{ grid.grid_id }}">{{ grid.grid_name }}</option>
+            {% endfor %}
+
+            
+        </select>
+
+        <input type="submit" value="Comment">
+
+    </form>
+
+    <footer>© Copyright Glitzy</footer>
 
 
-<footer>© Copyright Glitzy</footer>
 
 </body>
 </html>
