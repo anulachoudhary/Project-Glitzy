@@ -14,7 +14,7 @@
 
         Comment: <textarea rows="4" cols="50" name="comment"></textarea><br>
         
-        <select name='grids'>
+        <select name='select_grids'>
             {% for grid in grids %}
               <option value="{{ grid.grid_id }}">{{ grid.grid_name }}</option>
             {% endfor %}
@@ -25,6 +25,7 @@
         <input type="submit" value="Comment">
 
     </form>
+    </br></br>
 
     <footer>© Copyright Glitzy</footer>
 

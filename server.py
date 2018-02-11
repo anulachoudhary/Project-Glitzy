@@ -1,6 +1,6 @@
 """Glitzy"""
 import os
-
+import pdb
 import datetime
 from functions import * 
 
@@ -178,7 +178,7 @@ def save_comment():
     
     # Get form variables
     comment = request.form["comment"]
-    grid_id = request.form["grids"]
+    grid_id = request.form["select_grids"]
     glitz_id = request.form["glitz_id"]
 
     # save the comment on db
@@ -188,6 +188,40 @@ def save_comment():
     print comment_id
 
     return redirect("/")
+
+
+@app.route('/view_comments/<int:glitz_id>', methods=['GET', 'POST'])
+def view_comments(glitz_id):
+
+    grids = Grid.query.all()
+
+    # This route is re-used for two scenarios to load view_comments.js
+    # First scenario: when we view comments for first time from other page
+    # Second scenario: when we select a dropdown for the grid_id and reload comments
+
+    # pdb.set_trace()
+    select_grid_id = 0
+    select_grid_name = "all"
+    
+    # When we select a dropdown (POST form)
+    if request.method == 'POST':
+        select_grid_id = request.form["select_grids"]
+        comments = Comment.query.filter_by(glitz_id=glitz_id, grid_id=select_grid_id).all()
+        select_grid_row = Grid.query.get(select_grid_id)
+        select_grid_name = select_grid_row.grid_name
+
+    # When we load comments
+    else:
+        comments = Comment.query.filter_by(glitz_id=glitz_id).all()
+
+    # This needs special render variables (because we send selected
+    # grid id)   
+    return render_template("view_comments.js", comments=comments, 
+                            grids=grids, 
+                            glitz_id=glitz_id, 
+                            select_grid_id=select_grid_id, 
+                            select_grid_name=select_grid_name)
+
 
 
 if __name__ == "__main__":
