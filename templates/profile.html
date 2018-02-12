@@ -17,14 +17,22 @@
 
 
 <table>
-       {% for glitz in comments_count_on_glitz %}
+       {% for glitz_id, glitz_tuple in glitz_comments.iteritems() %}
         <tr>
             <td>
-                <a href="/view_comments/{{ glitz.glitz_id }}">
-                    {{ user_name }}
-                    <img src="{{ glitz.glitz_path }}" style="width:500px;"> </br>
-                    Comments: {{ glitz.count }}     
-                </a>  
+                <a href="/view_comments/{{ glitz_id }}">
+                    {{ glitz_tuple[1] }}
+                    <img src="{{ glitz_tuple[0] }}" style="width:500px;"> </br>
+                </a>
+                <table border=1>
+                    {% for comment in glitz_tuple[2] %}
+                    <tr>
+                        <td>  
+                            {{ comment }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
             </td>
         </tr>
         <tr><td>&nbsp;</td></tr>

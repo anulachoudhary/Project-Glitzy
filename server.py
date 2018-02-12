@@ -28,20 +28,43 @@ app.jinja_env.undefined = StrictUndefined
 @app.route('/')
 def index():
     """Profile page."""
+    if session.get('user_id') == None:
+        return redirect("/login")
+
     # pdb.set_trace()
     # Query to get glitz_path and comments_count by joining tables in --
     # -- Glitz and Comment obects.
-    comments_count_on_glitz = (db.session.query
-                                (Glitz.glitz_path, Glitz.glitz_id, func.count(Comment.comment_id).label("count"))
+    # comments_count_on_glitz = (db.session.query
+    #                             (Glitz.glitz_path, Glitz.glitz_id, func.count(Comment.comment_id).label("count"))
+    #                             .join(Comment)
+    #                             .group_by(Glitz.glitz_path, Glitz.glitz_id)
+    #                             .all())
+
+    glitz_feeds = (db.session.query
+                                (Glitz.glitz_path, Glitz.glitz_id, Comment.comment_text, 
+                                    (User.fname + ' ' + User.lname).label('name'))
                                 .join(Comment)
-                                .group_by(Glitz.glitz_path, Glitz.glitz_id)
+                                .join(User)
+                                .order_by(Glitz.posted_on)
                                 .all())
 
-    if session.get('user_id') != None:
-        return render_template("profile.html",
-                               comments_count_on_glitz=comments_count_on_glitz)
-    else:
-        return redirect("/login")
+    """
+        {glitz_id:(glitz_path, name, [comment1, comment2,......, comment'n])}
+    """
+    # Declare an emptry dictionary
+    glitz_comments = {}
+    
+    for glitz_feed in glitz_feeds:
+        feed_tuple = glitz_comments.get(glitz_feed.glitz_id)
+
+        if feed_tuple == None:
+            glitz_comments[glitz_feed.glitz_id] = (glitz_feed.glitz_path, glitz_feed.name, 
+                                        [glitz_feed.comment_text])
+        else:
+            feed_tuple[2].append(glitz_feed.comment_text)  
+
+
+    return render_template("profile.html", glitz_comments=glitz_comments)
 
 
 
