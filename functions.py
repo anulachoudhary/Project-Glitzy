@@ -46,3 +46,4 @@ def save_comment_data(glitz_id, user_id, grid_id, comment_text):
     db.session.commit()
 
     return comment.comment_id
+

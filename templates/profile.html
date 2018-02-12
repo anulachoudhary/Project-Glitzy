@@ -13,9 +13,25 @@
     Select image to upload:
     <input type="file" name="glitzToUpload" id="fileToUpload">
     <input type="submit" value="Upload Glitz" name="submit">
-</form>
+</form></br></br>
 
-<footer>© Copyright Glitzy</footer>
+
+<table>
+       {% for glitz in comments_count_on_glitz %}
+        <tr>
+            <td>
+                <a href="/view_comments/{{ glitz.glitz_id }}">
+                    {{ user_name }}
+                    <img src="{{ glitz.glitz_path }}" style="width:500px;"> </br>
+                    Comments: {{ glitz.count }}     
+                </a>  
+            </td>
+        </tr>
+        <tr><td>&nbsp;</td></tr>
+        {% endfor %}
+</table>
+
+<footer> © Copyright Glitzy</footer>
 
 </body>
 </html>

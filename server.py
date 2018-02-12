@@ -3,15 +3,12 @@ import os
 import pdb
 import datetime
 from functions import * 
-
 from jinja2 import StrictUndefined
-
 from flask import Flask, render_template, request, flash, redirect, session, url_for
 from flask_debugtoolbar import DebugToolbarExtension
-
 from model import connect_to_db, db, User, Login, Glitz, Grid, Comment
-
 from werkzeug.utils import secure_filename
+from sqlalchemy import func
 
 UPLOAD_FOLDER = 'glitz'
 
@@ -31,8 +28,21 @@ app.jinja_env.undefined = StrictUndefined
 @app.route('/')
 def index():
     """Profile page."""
+    # pdb.set_trace()
+    # Query to get glitz_path and comments_count by joining tables in --
+    # -- Glitz and Comment obects.
+    comments_count_on_glitz = (db.session.query
+                                (Glitz.glitz_path, Glitz.glitz_id, func.count(Comment.comment_id).label("count"))
+                                .join(Comment)
+                                .group_by(Glitz.glitz_path, Glitz.glitz_id)
+                                .all())
 
-    return render_template("profile.html")
+    if session.get('user_id') != None:
+        return render_template("profile.html",
+                               comments_count_on_glitz=comments_count_on_glitz)
+    else:
+        return redirect("/login")
+
 
 
 @app.route('/register', methods=['GET'])
@@ -69,12 +79,12 @@ def register_process():
     # flash("User %s added." % email)
     return redirect("/%s" % new_user.user_id)
 
-@app.route("/<int:user_id>")
-def user_detail(user_id):
-    """Show info about user."""
+# @app.route("/<int:user_id>")
+# def user_detail(user_id):
+#     """Show info about user."""
 
-    user = User.query.options(db.joinedload('logins')).get(user_id)
-    return render_template("profile.html", user=user)
+#     user = User.query.options(db.joinedload('logins')).get(user_id)
+#     return render_template("profile.html", user=user)
 
 
 
@@ -99,7 +109,7 @@ def login_process():
 
     if not logged_in_user:
         flash("No such user")
-        return redirect("/login")
+        return redirect("/register")
 
     if logged_in_user.password != encrypted_password:
         flash("Incorrect password")
@@ -108,8 +118,8 @@ def login_process():
     session["user_id"] = logged_in_user.user_id
 
     flash("Logged in")
-    # return redirect("/")
-    return redirect("/%s" % logged_in_user.user_id)
+    return redirect("/")
+    # return redirect("/%s" % logged_in_user.user_id)
 
 
 @app.route('/logout')
@@ -187,7 +197,7 @@ def save_comment():
     # We need to pass in glitz_id, grid_id and comment_text from HTML form
     print comment_id
 
-    return redirect("/")
+    return redirect("/view_comments/" + glitz_id)
 
 
 @app.route('/view_comments/<int:glitz_id>', methods=['GET', 'POST'])
@@ -221,6 +231,8 @@ def view_comments(glitz_id):
                             glitz_id=glitz_id, 
                             select_grid_id=select_grid_id, 
                             select_grid_name=select_grid_name)
+
+
 
 
 

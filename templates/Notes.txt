@@ -1,3 +1,6 @@
 1. Remove glith_path from the session and instead call glitz_id in the url. 
    This way we can use same page for multiple glitz id.
    
+It's so frustrating to reboot the server after ever single change on template - anyone knows why? It wasn't the case earlier. 
+
+Finally, all data input features of my are working! 
