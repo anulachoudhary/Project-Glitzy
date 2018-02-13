@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Glitzy</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
+
+
 <h1>Welcome to your Profile!</h1>
-
-
 <p>Upload your Glitz here</p>
 
 <form action="/upload_glitz" method="post" enctype="multipart/form-data">
@@ -15,8 +11,8 @@
     <input type="submit" value="Upload Glitz" name="submit">
 </form></br></br>
 
-
-<table>
+<!-- {glitz_id:(glitz_path, user_id, name, posted_on, [comment1, comment2,......, comment'n])} -->
+<table align="center" border="1">
        {% for glitz_id, glitz_tuple in glitz_comments %}
         <tr>
             <td>
@@ -30,17 +26,36 @@
                     </tr>
                 </table>
 
-                <a href="/view_comments/{{ glitz_id }}">
+                <a href="/view_glitz/{{ glitz_id }}">
                     <img src="{{ glitz_tuple[0] }}" style="width:500px;"> </br>
                 </a>
-                <table border=1>
+                <table border=0>
                     {% for comment in glitz_tuple[3] %}
                     <tr>
+                        <td>Author</td>
+                        <td>&nbsp;</td>
                         <td>  
                             {{ comment }} </br>
                         </td>
                     </tr>
                     {% endfor %}
+                </table>
+                <table>
+                    <tr>
+                        <td>
+                            <form action="/save_comment" method="POST">
+                                <input type="hidden" name="glitz_id" value="{{ glitz_id }}">
+                                Comment:
+                                <textarea rows="2" cols="30" name="comment"></textarea><br>
+                                <select name='select_grids'>
+                                    {% for grid in grids %}
+                                      <option value="{{ grid.grid_id }}">{{ grid.grid_name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <input type="submit" value="Comment">
+                            </form>
+                        </td>
+                    </tr>
                 </table>
             </td>
         </tr>
@@ -50,9 +65,4 @@
 
 
 
-
-<footer> © Copyright Glitzy</footer>
-
-</body>
-</html>
-</html>
+{% endblock %}

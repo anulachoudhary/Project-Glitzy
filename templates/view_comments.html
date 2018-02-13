@@ -1,11 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>View Comments</title>
-</head>
-<body>
-    <h1>View your Comments!</h1>
+<h1>View your Comments!</h1>
 <form action="/view_comments" method="POST" name="grid_area_form">    
     <select name='grids' onchange="alert('ff')">
         {% for grid in grids %}
@@ -24,12 +20,4 @@
     {% endfor %}
 </table>
 
-  </br></br>
-
-    <footer>© Copyright Glitzy</footer>
-
-
-
-</body>
-</html>
-</html>
+{% endblock %}

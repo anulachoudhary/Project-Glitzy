@@ -1,22 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Glitzy</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
+
 <h1>Welcome to Glitzy!</h1></br>
 <h3>Please login to your account</h3>
 <form action="/login" method="post">
-
     Email: <input type="text" name="email"><br>
-
     Password: <input type="password" name="password"><br><br>
-
     <input type="submit" value="Login"><br><br><br>
-
 </form>
 
-<footer>© Copyright Glitzy</footer>
-</body>
-</html>
-</html>
+{% endblock %}

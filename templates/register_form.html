@@ -1,9 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Glitzy</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
+
+
 <h1>Welcome to Glitzy!</h1></br>
 <h3>Please create an account</h3></br>
 <form action="/register" method="POST">
@@ -20,8 +18,4 @@
 
 </form>
 
-<footer>© Copyright Glitzy</footer>
-
-</body>
-</html>
-</html>
+{% endblock %}

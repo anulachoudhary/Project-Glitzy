@@ -9,7 +9,6 @@ from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Login, Glitz, Grid, Comment
 from werkzeug.utils import secure_filename
 from sqlalchemy import func
-from sqlalchemy import desc
 
 
 UPLOAD_FOLDER = 'glitz'
@@ -26,23 +25,16 @@ app.secret_key = "ABC"
 # Normally, if you use an undefined variable in Jinja2, it fails silently.
 # This is horrible. Fix this so that, instead, it raises an error.
 app.jinja_env.undefined = StrictUndefined
-
-
+    
 
 @app.route('/')
 def index():
     """Profile page."""
-    if session.get('user_id') == None:
+
+    if not is_user_logged_in(session):
         return redirect("/login")
 
-    # pdb.set_trace()
-    # Query to get glitz_path and comments_count by joining tables in --
-    # -- Glitz and Comment obects.
-    # comments_count_on_glitz = (db.session.query
-    #                             (Glitz.glitz_path, Glitz.glitz_id, func.count(Comment.comment_id).label("count"))
-    #                             .join(Comment)
-    #                             .group_by(Glitz.glitz_path, Glitz.glitz_id)
-    #                             .all())
+    grids = Grid.query.all()
 
     glitz_feeds = (db.session.query
                                 (Glitz.glitz_path
@@ -56,7 +48,7 @@ def index():
                                 .all())
 
     """
-        {glitz_id:(glitz_path, user_id, name, [comment1, comment2,......, comment'n])}
+        {glitz_id:(glitz_path, user_id, name, posted_on, [comment1, comment2,......, comment'n])}
     """
     # Declare an emptry dictionary
     glitz_comments = {}
@@ -76,8 +68,8 @@ def index():
     # Hence, use lambda to sort. 
     glitz_comments = sorted(glitz_comments.items(), key=lambda tup: tup[1][4], reverse=True)
 
-    return render_template("profile.html", glitz_comments=glitz_comments)
-
+    return render_template("profile.html", glitz_comments=glitz_comments
+                            ,grids=grids)
 
 
 @app.route('/register', methods=['GET'])
@@ -109,10 +101,9 @@ def register_process():
     db.session.add(new_login)
     db.session.commit()
 
+    session["user_id"] = new_login.user_id
 
-
-    # flash("User %s added." % email)
-    return redirect("/%s" % new_user.user_id)
+    return redirect("/")
 
 # @app.route("/<int:user_id>")
 # def user_detail(user_id):
@@ -152,7 +143,6 @@ def login_process():
 
     session["user_id"] = logged_in_user.user_id
 
-    flash("Logged in")
     return redirect("/")
     # return redirect("/%s" % logged_in_user.user_id)
 
@@ -162,12 +152,14 @@ def logout():
     """Log out."""
 
     del session["user_id"]
-    flash("Logged Out.")
     return redirect("/")
 
 @app.route('/upload_glitz', methods=['POST'])
 def upload_glitz():
     """Upload Glitz."""
+
+    if not is_user_logged_in(session):
+            return redirect("/login")
 
     # Get image 
     if request.method == 'POST':
@@ -206,18 +198,62 @@ def upload_glitz():
 # Make new route and new def for that route
 @app.route('/view_glitz/<int:glitz_id>')
 def view_glitz(glitz_id):
-    # Using glitz_id, we need to fetch glitz data from DB
-    glitz = Glitz.query.get(glitz_id)
-    grids = Grid.query.all()
     
-    return render_template("view_glitz.html", 
-                            file_path="../" + glitz.glitz_path,
-                            grids=grids,
-                            glitz_id=glitz_id)
+    if not is_user_logged_in(session):
+        return redirect("/login")
+
+    # Using glitz_id, we need to fetch glitz data from DB
+    
+    grids = Grid.query.all()
+
+    glitz_feeds = (db.session.query
+                                (Glitz.glitz_path
+                                    ,Glitz.glitz_id
+                                    ,Comment.comment_text
+                                    ,User.user_id
+                                    ,(User.fname + ' ' + User.lname).label('name')
+                                    ,Glitz.posted_on)
+                                .join(Comment)
+                                .join(User)
+                                .filter(Glitz.glitz_id == glitz_id)
+                                .all())
+
+    """
+        {glitz_id:(glitz_path, user_id, name, posted_on, [comment1, comment2,......, comment'n])}
+    """
+    # Declare an emptry dictionary
+    glitz_comments = {}
+    
+    for glitz_feed in glitz_feeds:
+        feed_tuple = glitz_comments.get(glitz_feed.glitz_id)
+
+        if feed_tuple == None:
+            glitz_comments[glitz_feed.glitz_id] = (glitz_feed.glitz_path
+                                                    ,glitz_feed.user_id
+                                                    ,glitz_feed.name
+                                                    ,[glitz_feed.comment_text]
+                                                    , glitz_feed.posted_on)
+        else:
+            feed_tuple[3].append(glitz_feed.comment_text)  
+    # Can't use order_by in the query to sort as dictionary is immutable. 
+    # Hence, use lambda to sort. 
+    glitz_comments = sorted(glitz_comments.items(), key=lambda tup: tup[1][4], reverse=True)
+
+    return render_template("view_glitz.html", glitz_comments=glitz_comments
+                            ,grids=grids)
+
+    # return render_template("view_glitz.html", 
+    #                         file_path="../" + glitz.glitz_path,
+    #                         grids=grids,
+    #                         glitz_id=glitz_id)
 
 
 @app.route('/save_comment', methods=['POST'])
 def save_comment():
+
+    if not is_user_logged_in(session):
+        return redirect("/login")
+    
     # Get user_id from session 
     user_id = session["user_id"]
     
@@ -230,13 +266,14 @@ def save_comment():
     comment_id = save_comment_data(glitz_id, user_id, grid_id, comment)
 
     # We need to pass in glitz_id, grid_id and comment_text from HTML form
-    print comment_id
-
-    return redirect("/view_comments/" + glitz_id)
+    return redirect("/view_glitz/" + glitz_id)
 
 
 @app.route('/view_comments/<int:glitz_id>', methods=['GET', 'POST'])
 def view_comments(glitz_id):
+
+    if not is_user_logged_in(session):
+        return redirect("/login")
 
     grids = Grid.query.all()
 
@@ -276,7 +313,7 @@ if __name__ == "__main__":
     # that we invoke the DebugToolbarExtension
 
     # Do not debug for demo
-    app.debug = True
+    app.debug = False
 
     connect_to_db(app)
 

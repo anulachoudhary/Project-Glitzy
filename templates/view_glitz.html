@@ -1,36 +1,60 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>View Glitz</title>
-</head>
-<body>
-    <h1>View your Glitz!</h1>
-
-    <img src="{{ file_path }}">
-
-    <form action="/save_comment" method="POST">
-
-        <input type="hidden" name="glitz_id" value="{{ glitz_id }}">
-
-        Comment: <textarea rows="4" cols="50" name="comment"></textarea><br>
-        
-        <select name='select_grids'>
-            {% for grid in grids %}
-              <option value="{{ grid.grid_id }}">{{ grid.grid_name }}</option>
-            {% endfor %}
-
-            
-        </select>
-
-        <input type="submit" value="Comment">
-
-    </form>
-    </br></br>
-
-    <footer>© Copyright Glitzy</footer>
+{% extends 'base.html' %}
+{% block content %}
 
 
 
-</body>
-</html>
-</html>
+<h1>View your Glitz!</h1>
+
+<!-- {glitz_id:(glitz_path, user_id, name, posted_on, [comment1, comment2,......, comment'n])} -->
+<table align="center" border="1">
+       {% for glitz_id, glitz_tuple in glitz_comments %}
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <td>
+                            <a href="/{{ glitz_tuple[1] }}">  
+                               <b> {{ glitz_tuple[2] }} </b>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+
+                <a href="/view_glitz/{{ glitz_id }}">
+                    <img src="../{{ glitz_tuple[0] }}" style="width:500px;"> </br>
+                </a>
+                <table border=0>
+                    {% for comment in glitz_tuple[3] %}
+                    <tr>
+                        <td>Author</td>
+                        <td>&nbsp;</td>
+                        <td>  
+                            {{ comment }} </br>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <table>
+                    <tr>
+                        <td>
+                            <form action="/save_comment" method="POST">
+                                <input type="hidden" name="glitz_id" value="{{ glitz_id }}">
+                                Comment:
+                                <textarea rows="2" cols="30" name="comment"></textarea><br>
+                                <select name='select_grids'>
+                                    {% for grid in grids %}
+                                      <option value="{{ grid.grid_id }}">{{ grid.grid_name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <input type="submit" value="Comment">
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr><td>&nbsp;</td></tr>
+        {% endfor %}
+</table>
+
+{% endblock %}

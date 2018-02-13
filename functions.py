@@ -47,3 +47,16 @@ def save_comment_data(glitz_id, user_id, grid_id, comment_text):
 
     return comment.comment_id
 
+
+"""
+Check if user is logged in
+"""
+
+def is_user_logged_in(session):
+
+    # (session.get('user_id') == None) ? return False : return True
+    if session.get('user_id') == None:
+        return False
+    else:
+        return True
+
