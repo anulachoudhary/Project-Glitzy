@@ -49,10 +49,10 @@ def index():
                                     ,Glitz.glitz_id
                                     ,Comment.comment_text
                                     ,User.user_id
-                                    ,(User.fname + ' ' + User.lname).label('name'))
+                                    ,(User.fname + ' ' + User.lname).label('name')
+                                    ,Glitz.posted_on)
                                 .join(Comment)
                                 .join(User)
-                                .order_by(Glitz.posted_on.desc())
                                 .all())
 
     """
@@ -68,10 +68,13 @@ def index():
             glitz_comments[glitz_feed.glitz_id] = (glitz_feed.glitz_path
                                                     ,glitz_feed.user_id
                                                     ,glitz_feed.name
-                                                    ,[glitz_feed.comment_text])
+                                                    ,[glitz_feed.comment_text]
+                                                    , glitz_feed.posted_on)
         else:
             feed_tuple[3].append(glitz_feed.comment_text)  
-
+    # Can't use order_by in the query to sort as dictionary is immutable. 
+    # Hence, use lambda to sort. 
+    glitz_comments = sorted(glitz_comments.items(), key=lambda tup: tup[1][4], reverse=True)
 
     return render_template("profile.html", glitz_comments=glitz_comments)
 
