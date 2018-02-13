@@ -9,11 +9,15 @@ from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Login, Glitz, Grid, Comment
 from werkzeug.utils import secure_filename
 from sqlalchemy import func
+from sqlalchemy import desc
+
 
 UPLOAD_FOLDER = 'glitz'
 
 app = Flask(__name__, static_folder = "glitz")
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.jinja_env.undefined = StrictUndefined
+app.jinja_env.auto_reload = True
 
 
 # Required to use Flask sessions and the debug toolbar
@@ -41,15 +45,18 @@ def index():
     #                             .all())
 
     glitz_feeds = (db.session.query
-                                (Glitz.glitz_path, Glitz.glitz_id, Comment.comment_text, 
-                                    (User.fname + ' ' + User.lname).label('name'))
+                                (Glitz.glitz_path
+                                    ,Glitz.glitz_id
+                                    ,Comment.comment_text
+                                    ,User.user_id
+                                    ,(User.fname + ' ' + User.lname).label('name'))
                                 .join(Comment)
                                 .join(User)
-                                .order_by(Glitz.posted_on)
+                                .order_by(Glitz.posted_on.desc())
                                 .all())
 
     """
-        {glitz_id:(glitz_path, name, [comment1, comment2,......, comment'n])}
+        {glitz_id:(glitz_path, user_id, name, [comment1, comment2,......, comment'n])}
     """
     # Declare an emptry dictionary
     glitz_comments = {}
@@ -58,10 +65,12 @@ def index():
         feed_tuple = glitz_comments.get(glitz_feed.glitz_id)
 
         if feed_tuple == None:
-            glitz_comments[glitz_feed.glitz_id] = (glitz_feed.glitz_path, glitz_feed.name, 
-                                        [glitz_feed.comment_text])
+            glitz_comments[glitz_feed.glitz_id] = (glitz_feed.glitz_path
+                                                    ,glitz_feed.user_id
+                                                    ,glitz_feed.name
+                                                    ,[glitz_feed.comment_text])
         else:
-            feed_tuple[2].append(glitz_feed.comment_text)  
+            feed_tuple[3].append(glitz_feed.comment_text)  
 
 
     return render_template("profile.html", glitz_comments=glitz_comments)

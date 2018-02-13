@@ -20,15 +20,24 @@
        {% for glitz_id, glitz_tuple in glitz_comments.iteritems() %}
         <tr>
             <td>
+                <table>
+                    <tr>
+                        <td>
+                            <a href="/{{ glitz_tuple[1] }}">  
+                               <b> {{ glitz_tuple[2] }} </b>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+
                 <a href="/view_comments/{{ glitz_id }}">
-                    {{ glitz_tuple[1] }}
                     <img src="{{ glitz_tuple[0] }}" style="width:500px;"> </br>
                 </a>
                 <table border=1>
-                    {% for comment in glitz_tuple[2] %}
+                    {% for comment in glitz_tuple[3] %}
                     <tr>
                         <td>  
-                            {{ comment }}
+                            {{ comment }} </br>
                         </td>
                     </tr>
                     {% endfor %}
@@ -38,6 +47,9 @@
         <tr><td>&nbsp;</td></tr>
         {% endfor %}
 </table>
+
+
+
 
 <footer> © Copyright Glitzy</footer>
 
