@@ -25,6 +25,8 @@ class User(db.Model):
     fname = db.Column(db.String(25), nullable=False)
     lname = db.Column(db.String(25), nullable=False)
 
+  # user = db.relationship(User, backref=backref("Login", cascade="all,delete"))
+
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -50,6 +52,7 @@ class Login(db.Model):
 
 # Define relationship to grid
     user = db.relationship("User", backref="logins")
+
 
 
 def __repr__(self):

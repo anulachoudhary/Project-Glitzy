@@ -60,3 +60,29 @@ def is_user_logged_in(session):
     else:
         return True
 
+
+def get_glitz_comments(glitz_feeds):
+
+    """
+        {glitz_id:(glitz_path, user_id, name, posted_on, [comment1, comment2,......, comment'n])}
+    """
+    # Declare an emptry dictionary
+    glitz_comments = {}
+        
+    for glitz_feed in glitz_feeds:
+        feed_tuple = glitz_comments.get(glitz_feed.glitz_id)
+
+        if feed_tuple == None:
+            glitz_comments[glitz_feed.glitz_id] = (glitz_feed.glitz_path
+                                                    ,glitz_feed.user_id
+                                                    ,glitz_feed.name
+                                                    ,[glitz_feed.comment_text]
+                                                    , glitz_feed.posted_on)
+        else:
+            feed_tuple[3].append(glitz_feed.comment_text)  
+    # Can't use order_by in the query to sort as dictionary is immutable. 
+    # Hence, use lambda to sort. 
+    glitz_comments = sorted(glitz_comments.items(), key=lambda tup: tup[1][4], reverse=True)
+
+    return glitz_comments
+
