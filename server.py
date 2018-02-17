@@ -9,6 +9,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Login, Glitz, Grid, Comment
 from werkzeug.utils import secure_filename
 from sqlalchemy import func
+from sqlalchemy.orm import aliased
 
 
 UPLOAD_FOLDER = 'glitz'
@@ -34,6 +35,8 @@ def index():
     if not is_user_logged_in(session):
         return redirect("/login")
 
+    Comments_User = aliased(User)
+
     grids = Grid.query.all()
 
     glitz_feeds = (db.session.query
@@ -42,15 +45,17 @@ def index():
                                     ,Comment.comment_text
                                     ,User.user_id
                                     ,(User.fname + ' ' + User.lname).label('name')
-                                    ,Glitz.posted_on)
-                                .outerjoin(Comment)
-                                .outerjoin(User)
+                                    ,Glitz.posted_on
+                                    ,Comments_User.fname)
+                                .outerjoin(User, User.user_id == Glitz.user_id)
+                                .outerjoin(Comment, Comment.glitz_id == Glitz.glitz_id)
+                                .join(Comments_User, Comments_User.user_id == Comment.user_id)
                                 .all())
 
     glitz_comments = get_glitz_comments(glitz_feeds)  
 
     return render_template("profile.html", glitz_comments=glitz_comments
-                            ,grids=grids)                                                   
+                            ,grids=grids, user_name=session.get("user_name", "User"))                                                   
 
 
 
@@ -84,6 +89,7 @@ def register_process():
     db.session.commit()
 
     session["user_id"] = new_login.user_id
+    session["user_name"] = fname 
 
     return redirect("/")
 
@@ -124,6 +130,9 @@ def login_process():
         return redirect("/login")
 
     session["user_id"] = logged_in_user.user_id
+    logged_in_user_details = User.query.get(logged_in_user.user_id)
+
+    session["user_name"] = logged_in_user_details.fname 
 
     return redirect("/")
     # return redirect("/%s" % logged_in_user.user_id)
@@ -188,15 +197,20 @@ def view_glitz(glitz_id):
     
     grids = Grid.query.all()
 
+    # Glitz_User = aliased(User)
+    Comments_User = aliased(User)
+
     glitz_feeds = (db.session.query
                                 (Glitz.glitz_path
                                     ,Glitz.glitz_id
                                     ,Comment.comment_text
                                     ,User.user_id
                                     ,(User.fname + ' ' + User.lname).label('name')
-                                    ,Glitz.posted_on)
-                                .outerjoin(Comment)
-                                .outerjoin(User)
+                                    ,Glitz.posted_on
+                                    ,Comments_User.fname)
+                                .outerjoin(User, User.user_id == Glitz.user_id)
+                                .outerjoin(Comment, Comment.glitz_id == Glitz.glitz_id)
+                                .join(Comments_User, Comments_User.user_id == Comment.user_id)
                                 .filter(Glitz.glitz_id == glitz_id)
                                 .all())
 
@@ -205,12 +219,6 @@ def view_glitz(glitz_id):
     return render_template("view_glitz.html", glitz_comments=glitz_comments
                             ,grids=grids)                                                   
 
-
-
-    # return render_template("view_glitz.html", 
-    #                         file_path="../" + glitz.glitz_path,
-    #                         grids=grids,
-    #                         glitz_id=glitz_id)
 
 
 @app.route('/save_comment', methods=['POST'])

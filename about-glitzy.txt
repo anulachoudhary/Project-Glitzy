@@ -1,0 +1,8 @@
+Glitzy is a social advising webapp on fashion. 
+On Glitzy an user can upload glitz (an image) to get feedback or advise on overall attire or on some specific area. Other users can see the post on their feeds/profile page. And can write comment to compliment or advise by hovering on the picture where they can select a perticular area to comment. Everyone in the group can see read comments based on that perticular area.
+
+
+
+Glitzy is an immersive and interactive social platform for fashion and trend advice! 
+Using Glitzy, users can upload their pictures and get fashion advice from their social networks. People can seek advice on specifics (like pants, tops, jackets) or accessories (like earings, belts) or just on the overall attire! 
+Users can also keep in touch with latest trends in their social networks and provide their awesome insights, compliments and advice, by simply pointing to specific areas on pictures. 

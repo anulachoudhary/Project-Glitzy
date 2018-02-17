@@ -64,7 +64,7 @@ def is_user_logged_in(session):
 def get_glitz_comments(glitz_feeds):
 
     """
-        {glitz_id:(glitz_path, user_id, name, posted_on, [comment1, comment2,......, comment'n])}
+        {glitz_id:(glitz_path, user_id, name, posted_on, [(comment1, comment_author), (comment2, comment_author),..'])}
     """
     # Declare an emptry dictionary
     glitz_comments = {}
@@ -72,14 +72,23 @@ def get_glitz_comments(glitz_feeds):
     for glitz_feed in glitz_feeds:
         feed_tuple = glitz_comments.get(glitz_feed.glitz_id)
 
+        # First entry in dictionary
         if feed_tuple == None:
+            # We do not want to put a null when comments dont exist 
+            comments_list = []
+            if glitz_feed.comment_text != None:
+                comments_list.append((glitz_feed.comment_text, glitz_feed.fname))
+
+            # Create tuple
             glitz_comments[glitz_feed.glitz_id] = (glitz_feed.glitz_path
                                                     ,glitz_feed.user_id
                                                     ,glitz_feed.name
-                                                    ,[glitz_feed.comment_text]
-                                                    , glitz_feed.posted_on)
+                                                    ,comments_list
+                                                    ,glitz_feed.posted_on)
+        # Comments exist, now add more
         else:
-            feed_tuple[3].append(glitz_feed.comment_text)  
+            feed_tuple[3].append((glitz_feed.comment_text, glitz_feed.fname))
+              
     # Can't use order_by in the query to sort as dictionary is immutable. 
     # Hence, use lambda to sort. 
     glitz_comments = sorted(glitz_comments.items(), key=lambda tup: tup[1][4], reverse=True)

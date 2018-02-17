@@ -24,12 +24,12 @@
                     <img src="../{{ glitz_tuple[0] }}" style="width:500px;"> </br>
                 </a>
                 <table border=0>
-                    {% for comment in glitz_tuple[3] %}
+                    {% for comment_author in glitz_tuple[3] %}
                     <tr>
-                        <td>Author</td>
+                        <td>{{ comment_author[1] }}</td>
                         <td>&nbsp;</td>
                         <td>  
-                            {{ comment }} </br>
+                            {{ comment_author[0] }} </br>
                         </td>
                     </tr>
                     {% endfor %}
