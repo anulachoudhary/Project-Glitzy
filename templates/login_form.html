@@ -3,10 +3,26 @@
 
 <h1>Welcome to Glitzy!</h1></br>
 <h3>Please login to your account</h3>
-<form action="/login" method="post">
-    Email: <input type="text" name="email"><br>
-    Password: <input type="password" name="password"><br><br>
-    <input type="submit" value="Login"><br><br><br>
+
+<div style="height: 20px; display: none; background-color: #c7c5c5;" id="statusDiv">
+</div>
+
+</br>    
+
+<form action="/login" id="loginForm" method="post">
+    Email: <input type="text" id="emailText" name="email"><br>
+    Password: <input type="password" id="passwordText" name="password"><br><br>
+    <input type="button" id="loginButton" value="Login"><br><br><br>
 </form>
+
+<script type="text/javascript">
+    
+    $("#loginButton").click(function(){
+        // Invoke
+        checkLogin();
+    }); 
+
+
+</script>
 
 {% endblock %}

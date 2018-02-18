@@ -2,7 +2,6 @@
 {% block content %}
 
 
-
 <h1>View your Glitz!</h1>
 
 <!-- {glitz_id:(glitz_path, user_id, name, posted_on, [comment1, comment2,......, comment'n])} -->
@@ -23,21 +22,23 @@
                 <a href="/view_glitz/{{ glitz_id }}">
                     <img src="../{{ glitz_tuple[0] }}" style="width:500px;"> </br>
                 </a>
-                <table border=0>
-                    {% for comment_author in glitz_tuple[3] %}
-                    <tr>
-                        <td>{{ comment_author[1] }}</td>
-                        <td>&nbsp;</td>
-                        <td>  
-                            {{ comment_author[0] }} </br>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </table>
+                <div id="commentsDiv">
+                    <table border=0 id="commentsTable">
+                        {% for comment_author in glitz_tuple[3] %}
+                        <tr>
+                            <td>{{ comment_author[1] }}</td>
+                            <td>&nbsp;</td>
+                            <td>  
+                                {{ comment_author[0] }} </br>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
                 <table>
                     <tr>
                         <td>
-                            <form action="/save_comment" method="POST">
+                            <form action="/save_comment" id= "saveCommentForm" method="POST">
                                 <input type="hidden" name="glitz_id" value="{{ glitz_id }}">
                                 Comment:
                                 <textarea rows="2" cols="30" name="comment"></textarea><br>
@@ -46,7 +47,7 @@
                                       <option value="{{ grid.grid_id }}">{{ grid.grid_name }}</option>
                                     {% endfor %}
                                 </select>
-                                <input type="submit" value="Comment">
+                                <input type="button" id="saveCommentButton" value="Comment">
                             </form>
                         </td>
                     </tr>
@@ -56,5 +57,18 @@
         <tr><td>&nbsp;</td></tr>
         {% endfor %}
 </table>
+
+<link rel="stylesheet" href="../glitz/bootstrap-styles.css">
+<link rel="stylesheet" href="../glitz/glitz.css">
+<script src="../glitz/glitz.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $("#saveCommentButton").click(function(){
+        // Invoke
+        saveComment();
+    }); 
+</script>
+
+
 
 {% endblock %}

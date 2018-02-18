@@ -2,9 +2,11 @@
 import os
 import pdb
 import datetime
+import json
 from functions import * 
+from response import *
 from jinja2 import StrictUndefined
-from flask import Flask, render_template, request, flash, redirect, session, url_for
+from flask import Flask, render_template, request, flash, jsonify, redirect, session, url_for
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Login, Glitz, Grid, Comment
 from werkzeug.utils import secure_filename
@@ -122,20 +124,21 @@ def login_process():
     logged_in_user = Login.query.filter_by(email=email).first()
 
     if not logged_in_user:
-        flash("No such user")
-        return redirect("/register")
+        response = Response(False, "", "User not found. Please register.")
+        return jsonify(response.__dict__)
 
     if logged_in_user.password != encrypted_password:
-        flash("Incorrect password")
-        return redirect("/login")
+        response = Response(False, "", "Wrong password, please try again!")
+        return jsonify(response.__dict__)        
+
 
     session["user_id"] = logged_in_user.user_id
     logged_in_user_details = User.query.get(logged_in_user.user_id)
 
     session["user_name"] = logged_in_user_details.fname 
 
-    return redirect("/")
-    # return redirect("/%s" % logged_in_user.user_id)
+    response = Response(True, "/")
+    return jsonify(response.__dict__)
 
 
 @app.route('/logout')
@@ -238,8 +241,19 @@ def save_comment():
     # save the comment on db
     comment_id = save_comment_data(glitz_id, user_id, grid_id, comment)
 
+    # Create a dictionary to hold data for new comment
+    comment_data = {}
+    comment_data["glitz_id"] = glitz_id
+    comment_data["grid_id"] = grid_id
+    comment_data["comment"] = comment
+    comment_data["user_name"] = session["user_name"] 
+
+    response = Response(True, comment_data)
+
     # We need to pass in glitz_id, grid_id and comment_text from HTML form
-    return redirect("/view_glitz/" + glitz_id)
+
+    return jsonify(response.__dict__)
+
 
 
 @app.route('/view_comments/<int:glitz_id>', methods=['GET', 'POST'])
