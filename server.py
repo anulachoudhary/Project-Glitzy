@@ -10,7 +10,7 @@ from flask import Flask, render_template, request, flash, jsonify, redirect, ses
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Login, Glitz, Grid, Comment
 from werkzeug.utils import secure_filename
-from sqlalchemy import func
+from sqlalchemy import func, desc
 from sqlalchemy.orm import aliased
 
 
@@ -37,27 +37,25 @@ def index():
     if not is_user_logged_in(session):
         return redirect("/login")
 
-    Comments_User = aliased(User)
-
-    grids = Grid.query.all()
-
     glitz_feeds = (db.session.query
                                 (Glitz.glitz_path
                                     ,Glitz.glitz_id
-                                    ,Comment.comment_text
+                                    ,func.count(Comment.comment_id)
                                     ,User.user_id
                                     ,(User.fname + ' ' + User.lname).label('name')
-                                    ,Glitz.posted_on
-                                    ,Comments_User.fname)
+                                    ,Glitz.posted_on)
                                 .outerjoin(User, User.user_id == Glitz.user_id)
                                 .outerjoin(Comment, Comment.glitz_id == Glitz.glitz_id)
-                                .join(Comments_User, Comments_User.user_id == Comment.user_id)
+                                .group_by(Glitz.glitz_path
+                                          ,Glitz.glitz_id
+                                          ,User.user_id
+                                          ,'name'
+                                          ,Glitz.posted_on)
+                                .order_by(desc(Glitz.posted_on))
                                 .all())
 
-    glitz_comments = get_glitz_comments(glitz_feeds)  
-
-    return render_template("profile.html", glitz_comments=glitz_comments
-                            ,grids=grids, user_name=session.get("user_name", "User"))                                                   
+    return render_template("profile.html", glitz_feeds=glitz_feeds
+                           ,user_name=session.get("user_name", "User"))                                                   
 
 
 
@@ -77,7 +75,14 @@ def register_process():
     fname = request.form["fname"]
     email = request.form["email"]
     password = request.form["password"]
-    
+
+    existing_email = db.session.query(Login.email).filter(Login.email == email).first()
+
+    if existing_email is not None:
+        response = Response(False, "", "Email already registered. Please login.")
+        return jsonify(response.__dict__) 
+
+
     new_user = User(fname=fname, lname=lname)
 
     db.session.add(new_user)
@@ -93,7 +98,11 @@ def register_process():
     session["user_id"] = new_login.user_id
     session["user_name"] = fname 
 
-    return redirect("/")
+    response = Response(True, "/")
+    return jsonify(response.__dict__)
+
+
+
 
 # @app.route("/<int:user_id>")
 # def user_detail(user_id):
@@ -197,29 +206,51 @@ def view_glitz(glitz_id):
         return redirect("/login")
 
     # Using glitz_id, we need to fetch glitz data from DB
-    
     grids = Grid.query.all()
 
-    # Glitz_User = aliased(User)
-    Comments_User = aliased(User)
+    # # Glitz_User = aliased(User)
+    # Comments_User = aliased(User)
 
-    glitz_feeds = (db.session.query
-                                (Glitz.glitz_path
-                                    ,Glitz.glitz_id
-                                    ,Comment.comment_text
-                                    ,User.user_id
-                                    ,(User.fname + ' ' + User.lname).label('name')
-                                    ,Glitz.posted_on
-                                    ,Comments_User.fname)
-                                .outerjoin(User, User.user_id == Glitz.user_id)
-                                .outerjoin(Comment, Comment.glitz_id == Glitz.glitz_id)
-                                .join(Comments_User, Comments_User.user_id == Comment.user_id)
-                                .filter(Glitz.glitz_id == glitz_id)
+    # Get the glitz detail 
+    glitz_details = (db.session.query
+                        (Glitz.glitz_path
+                            ,Glitz.glitz_id
+                            ,User.user_id
+                            ,(User.fname + ' ' + User.lname).label('name'))
+                        .join(User, User.user_id == Glitz.user_id)
+                        .filter(Glitz.glitz_id == glitz_id)
+                        .first())
+
+    # Get the comments details 
+    glitz_comments = (db.session.query
+                                (Comment.comment_text
+                                    ,Comment.user_id
+                                    ,User.fname
+                                    ,Comment.commented_on)
+                                .join(User, User.user_id == Comment.user_id)
+                                .filter(Comment.glitz_id == glitz_id)
+                                .order_by(Comment.commented_on)
                                 .all())
 
-    glitz_comments = get_glitz_comments(glitz_feeds)  
 
-    return render_template("view_glitz.html", glitz_comments=glitz_comments
+    # glitz_feeds = (db.session.query
+    #                             (Glitz.glitz_path
+    #                                 ,Glitz.glitz_id
+    #                                 ,Comment.comment_text
+    #                                 ,User.user_id
+    #                                 ,(User.fname + ' ' + User.lname).label('name')
+    #                                 ,Glitz.posted_on
+    #                                 ,Comments_User.fname)
+    #                             .outerjoin(Comment, Comment.glitz_id == Glitz.glitz_id)
+    #                             .join(User, User.user_id == Glitz.user_id)
+    #                             .join(Comments_User, Comments_User.user_id == Comment.user_id)
+    #                             .filter(Glitz.glitz_id == glitz_id)
+    #                             .order_by(Comment.commented_on)
+    #                             .all())
+
+    # glitz_comments = get_glitz_comments(glitz_feeds)  
+
+    return render_template("view_glitz.html", glitz_details=glitz_details, glitz_comments=glitz_comments
                             ,grids=grids)                                                   
 
 
@@ -290,6 +321,11 @@ def view_comments(glitz_id):
                             glitz_id=glitz_id, 
                             select_grid_id=select_grid_id, 
                             select_grid_name=select_grid_name)
+
+
+@app.route('/test')
+def test():
+    return render_template("/testloginregister.html")
 
 
 # @app.route('/delete_glitz')

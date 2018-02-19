@@ -1,68 +1,87 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<div class="container-fluid">
+    <div class="row border">
+      <div class="col-xs-3">
+        <p>
+        <h1>Welcome {{ user_name }}!</h1>
+        </p>
+      </div>
+      <div class="col-xs-6 border">
+        
 
-<h1>Welcome {{ user_name }}!</h1>
-<p>Upload your Glitz here</p>
+        <!-- <img id="blah" src="http://placehold.it/180" alt="your image" />
+        <input type='file' onchange="readURL(this);" />
+        
 
-<form action="/upload_glitz" method="post" enctype="multipart/form-data">
-    Select image to upload:
-    <input type="file" name="glitzToUpload" id="fileToUpload">
-    <input type="submit" value="Upload Glitz" name="submit">
-</form></br></br>
+        <div class="fileinput fileinput-new" data-provides="fileinput">
+          <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 150px;"></div>
+          <div>
+            <span class="btn btn-default btn-file"><span class="fileinput-new">Select image</span><span class="fileinput-exists">Change</span><input type="file" name="..."></span>
+            <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+          </div>
+        </div>
+ -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-11">
+                    <input type="text" class="form-control" placeholder="Message" id="inputSuccess2" aria-describedby="inputSuccess2Status">
+                </div>
+                <div class="col-xs-1" align="left">
+                  <button type="button" class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-camera"></span>
+                  </button>
+                </div>
+            </div>
+        </div>
+        
+        <p>Upload your Glitz here</p>
+        <form action="/upload_glitz" method="post" enctype="multipart/form-data">
+            Select image to upload:
+            <input type="file" name="glitzToUpload" id="fileToUpload">
+            <input type="submit" value="Upload Glitz" name="submit">
+        </form>
 
-<!-- {glitz_id:(glitz_path, user_id, name, posted_on, [comment1, comment2,......, comment'n])} -->
-<table align="center" border="1">
-       {% for glitz_id, glitz_tuple in glitz_comments %}
-        <tr>
-            <td>
-                <table>
-                    <tr>
-                        <td>
-                            <a href="/{{ glitz_tuple[1] }}">  
-                               <b> {{ glitz_tuple[2] }} </b>
-                            </a>
-                        </td>
-                    </tr>
-                </table>
+        <!-- {glitz_id:(glitz_path, user_id, name, posted_on, [comment1, comment2,......, comment'n])} -->
+        <!-- [glitz_path, glitz_id, count, user_id, name, posted_on] -->
+        <table align="center" class="border">
+           {% for glitz in glitz_feeds %}
+            <tr>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                <a href="/{{ glitz[3] }}">  
+                                   <b> {{ glitz[4] }} </b>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
 
-                <a href="/view_glitz/{{ glitz_id }}">
-                    <img src="{{ glitz_tuple[0] }}" class="glitz_image"> </br>
-                </a>
-                <table border=0>
-                    {% for comment_author in glitz_tuple[3] %}
-                    <tr>
-                        <td>{{ comment_author[1] }}</td>
-                        <td>&nbsp;</td>
-                        <td>  
-                            {{ comment_author[0] }} </br>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </table>
-                <table>
-                    <tr>
-                        <td>
-                            <form action="/save_comment" method="POST">
-                                <input type="hidden" name="glitz_id" value="{{ glitz_id }}">
-                                Comment:
-                                <textarea rows="2" cols="30" name="comment"></textarea><br>
-                                <select name='select_grids'>
-                                    {% for grid in grids %}
-                                      <option value="{{ grid.grid_id }}">{{ grid.grid_name }}</option>
-                                    {% endfor %}
-                                </select>
-                                <input type="submit" value="Comment">
-                            </form>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr><td>&nbsp;</td></tr>
-        {% endfor %}
-</table>
+                    <a href="/view_glitz/{{ glitz[1] }}">
+                        <img src="{{ glitz[0] }}" class="glitz_image"> </br>
+                        {{ glitz[2]}} comments
+                    </a>
+                    
+                </td>
+            </tr>
+            <tr><td>&nbsp;</td></tr>
+            {% endfor %}
+        </table>
 
 
+      </div>
+      <div class="col-xs-3">
+      </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#uploadCameraButton").click(function() {
+        alert('test');
+    });
+
+</script>
 
 {% endblock %}

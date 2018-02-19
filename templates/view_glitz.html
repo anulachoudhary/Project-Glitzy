@@ -4,58 +4,58 @@
 
 <h1>View your Glitz!</h1>
 
-<!-- {glitz_id:(glitz_path, user_id, name, posted_on, [comment1, comment2,......, comment'n])} -->
+<!-- glitz_details: path, glitz_id, user_id, name -->
 <table align="center" border="1">
-       {% for glitz_id, glitz_tuple in glitz_comments %}
-        <tr>
-            <td>
-                <table>
-                    <tr>
-                        <td>
-                            <a href="/{{ glitz_tuple[1] }}">  
-                               <b> {{ glitz_tuple[2] }} </b>
-                            </a>
-                        </td>
-                    </tr>
-                </table>
+ <tr>
+    <td>
+        <table>
+            <tr>
+                <td>
+                    <a href="/{{ glitz_details[2] }}">  
+                     <b> {{ glitz_details[3] }} </b>
+                 </a>
+             </td>
+         </tr>
+     </table>
 
-                <a href="/view_glitz/{{ glitz_id }}">
-                    <img src="../{{ glitz_tuple[0] }}" style="width:500px;"> </br>
-                </a>
-                <div id="commentsDiv">
-                    <table border=0 id="commentsTable">
-                        {% for comment_author in glitz_tuple[3] %}
-                        <tr>
-                            <td>{{ comment_author[1] }}</td>
-                            <td>&nbsp;</td>
-                            <td>  
-                                {{ comment_author[0] }} </br>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                </div>
-                <table>
-                    <tr>
-                        <td>
-                            <form action="/save_comment" id= "saveCommentForm" method="POST">
-                                <input type="hidden" name="glitz_id" value="{{ glitz_id }}">
-                                Comment:
-                                <textarea rows="2" cols="30" name="comment"></textarea><br>
-                                <select name='select_grids'>
-                                    {% for grid in grids %}
-                                      <option value="{{ grid.grid_id }}">{{ grid.grid_name }}</option>
-                                    {% endfor %}
-                                </select>
-                                <input type="button" id="saveCommentButton" value="Comment">
-                            </form>
-                        </td>
-                    </tr>
-                </table>
+     <a href="/view_glitz/{{ glitz_details[1] }}">
+        <img src="../{{ glitz_details[0] }}" style="width:500px;"> </br>
+    </a>
+    <!-- glitz_comments: text, user_id, fname, commented_on -->
+    <div id="commentsDiv">
+        <table border=0 id="commentsTable">
+            {% for comment in glitz_comments %}
+            <tr>
+                <td>{{ comment[2] }}</td>
+                <td>&nbsp;</td>
+                <td>  
+                {{ comment[0] }} </br>
             </td>
         </tr>
-        <tr><td>&nbsp;</td></tr>
         {% endfor %}
+    </table>
+</div>
+<table>
+    <tr>
+        <td>
+            <form action="/save_comment" id= "saveCommentForm" method="POST">
+                <input type="hidden" name="glitz_id" value="{{ glitz_details[1] }}">
+                Comment:
+                <textarea class="commentTextArea" rows="2" cols="30" id="commentTextArea" name="comment"></textarea>
+                <br>
+                <select name='select_grids'>
+                    {% for grid in grids %}
+                    <option value="{{ grid.grid_id }}">{{ grid.grid_name }}</option>
+                    {% endfor %}
+                </select>
+                <input type="button" id="saveCommentButton" value="Comment">
+            </form>
+        </td>
+    </tr>
+</table>
+</td>
+</tr>
+<tr><td>&nbsp;</td></tr>
 </table>
 
 <link rel="stylesheet" href="../glitz/bootstrap-styles.css">

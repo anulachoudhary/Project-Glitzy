@@ -1,3 +1,23 @@
+$(function() {
+
+    $('#login-form-link').click(function(e) {
+        $("#login-form").delay(100).fadeIn(100);
+        $("#register-form").fadeOut(100);
+        $('#register-form-link').removeClass('active');
+        $(this).addClass('active');
+        e.preventDefault();
+    });
+    $('#register-form-link').click(function(e) {
+        $("#register-form").delay(100).fadeIn(100);
+        $("#login-form").fadeOut(100);
+        $('#login-form-link').removeClass('active');
+        $(this).addClass('active');
+        e.preventDefault();
+    });
+
+});
+
+
 function test(name) {
     console.log("Hi " + name);
 }
@@ -9,7 +29,7 @@ function checkLogin() {
 
     $.ajax({
         url: "/login",
-        data: $("#loginForm").serialize(),
+        data: $("#login-form").serialize(),
         type: "POST",
         datatype: "json", 
         success: function(response){
@@ -20,8 +40,8 @@ function checkLogin() {
                 window.location.href = response.data;
             } else {
                 // 0 means "not found"
-                $("#statusDiv").text(response.error);
-                $("#statusDiv").show();
+                $("#modalDangerMessage").text(response.error);
+                $("#modalDialog").modal('show');
             }
         }, 
         error: function(error){
@@ -31,6 +51,30 @@ function checkLogin() {
 
 }
 
+
+function register(){
+    $.ajax({
+        url: "/register",
+        data: $("#register-form").serialize(),
+        type: "POST",
+        datatype: "json",
+        success: function(response){
+            console.log(response);
+
+            if (response.status == true) {
+                // Redirect to profile 
+                window.location.href = response.data;
+            } else {
+                // 0 means "not found"
+                $("#modalDangerMessage").text(response.error);
+                $("#modalDialog").modal('show');
+            }
+        }, 
+        error: function(error){
+            console.log(error);
+        }
+    });
+}
 
 // {
 //             "userName": email,
@@ -51,8 +95,10 @@ function saveComment() {
         success: function(response){
             console.log(response);
 
+            $("#commentTextArea").val(" ");
+
             // $("#commentsTable tbody").append("<tr><td>" + response.data.user_name + "</td><td>&nbsp;</td><td>" + response.data.comment + "</br></td></tr>");
-            // $("#commentsDiv").append(response.data.user_name + ' ' + response.data.comment);
+            $("#commentsDiv").append(response.data.user_name + ' ' + response.data.comment);
 
             // if (response.status == true) {
             //     // Redirect to profile 
