@@ -23,25 +23,39 @@
           </div>
         </div>
  -->
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xs-11">
-                    <input type="text" class="form-control" placeholder="Message" id="inputSuccess2" aria-describedby="inputSuccess2Status">
+            
+        <form action="/upload_glitz" id="formUploadGlitz" method="post" enctype="multipart/form-data">
+            <div class="container-fluid">
+                <div class="row" id="imagePreviewWindow" style="display: none;">
+                    <div class="col-xs-4">
+                        <div class="thumbnail">
+                            <img id="imagePreviewControl" alt="" style="height: 180px; width: 100%; display: block;">   
+                        </div>
+                    </div>
                 </div>
-                <div class="col-xs-1" align="left">
-                  <button type="button" class="btn btn-default btn-sm">
-                    <span class="glyphicon glyphicon-camera"></span>
-                  </button>
+                <div class="row">
+                    <div class="col-xs-9">
+                        <input type="text" class="form-control" placeholder="Message" id="inputSuccess2" aria-describedby="inputSuccess2Status">
+                    </div>
+                    <div class="col-xs-1" align="left">
+                      <button type="button" id="buttonImagePicker" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-camera"></span>
+                      </button>
+                    </div>
+                    <div class="col-xs-1" align="left">
+                      <button type="button" name="buttonSubmitGlitz" id="buttonSubmitGlitz" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-arrow-up"></span> Gllitz
+                      </button>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <p>Upload your Glitz here</p>
-        <form action="/upload_glitz" method="post" enctype="multipart/form-data">
-            Select image to upload:
-            <input type="file" name="glitzToUpload" id="fileToUpload">
-            <input type="submit" value="Upload Glitz" name="submit">
+            <input type="file" style="display: none;" onchange="showPicture(this);" name="glitzToUpload" id="fileToUpload"/>
+                
         </form>
+
+        
+        
+
 
         <!-- {glitz_id:(glitz_path, user_id, name, posted_on, [comment1, comment2,......, comment'n])} -->
         <!-- [glitz_path, glitz_id, count, user_id, name, posted_on] -->
@@ -78,9 +92,28 @@
 </div>
 
 <script type="text/javascript">
-    $("#uploadCameraButton").click(function() {
-        alert('test');
+
+    $("#buttonImagePicker").click(function() {
+        $("#fileToUpload").click();
     });
+
+    $("#buttonSubmitGlitz").click(function() {
+        $("#formUploadGlitz").submit();
+    });
+
+    // https://stackoverflow.com/questions/12368910/html-display-image-after-selecting-filename
+    function showPicture(fileInputControl) {
+        if (fileInputControl.files && fileInputControl.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (evt) {
+                $('#imagePreviewControl').attr('src', evt.target.result);
+                $('#imagePreviewWindow').show();
+            };
+
+            reader.readAsDataURL(fileInputControl.files[0]);
+        }
+    }
 
 </script>
 
