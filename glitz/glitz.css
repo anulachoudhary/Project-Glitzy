@@ -7,11 +7,25 @@
     height: 1000px;
 }
 
+.resetButton {
+    background-color: blue;
+    opacity: 0.5;
+    text-align: center;
+    cursor: pointer;
+    text-align: bottom;
+}
+
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}
+
 .overlay {
     width: 100%;
     height: 100%;
     background-color: gray;
     opacity: 0.4;
+    cursor: pointer;        
 }
 
 .gridDetails {
@@ -20,6 +34,7 @@
     background-color: blue;
     opacity: 0.2;
     text-align: center;
+    cursor: pointer;
 }
 
 .glitz_image_grid_row {

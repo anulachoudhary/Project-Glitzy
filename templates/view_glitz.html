@@ -3,25 +3,30 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-5">
             <p>
                 <a href="/{{ glitz_details[2] }}">
                     <h3>{{ glitz_details[3] }}'s Glitz!</h3>
                 </a>
             </p>
         </div>
+        <div class="col-xs-2">
+            <div class="resetButton" style="display: none" id="resetButton" onclick="resetGridCells()">Reset
+            </div>
+        </div>
     </div>
+
     <div class="row border" >
         <div class="col-xs-8 border">
-            <div class="container-fluid bg-overlay nopadding"  
-                style="background-image: url('../{{ glitz_details[0] }}');">
+            <div class="container-fluid bg-overlay nopadding" style="background-image: url('../{{ glitz_details[0] }}');">
+
                 {% for i in range(4) %}
                 <div class="row glitz_image_grid_row nopadding">
 
                     {% for j in range(4) %}
-                        <div class="col-xs-3 nopadding glitz_image_grid_col border">
-                            <div class="overlay nopadding">%%</div>
-                            <div class="gridDetails" id="gridDetails{{ i }}{{ j }}" onclick="handleGridClick(this)">
+                        <div class="col-xs-3 nopadding glitz_image_grid_col">
+                            <!-- <div class="overlay nopadding">%</div> -->
+                            <div class="gridDetails noopGridCell" id="gridDetails{{ i }}{{ j }}" onclick="handleGridClick(this)">
                                 {{ i }}{{ j }}
                             </div>
                         </div>   
@@ -77,10 +82,26 @@
         saveComment();
     }); 
 
+
     function handleGridClick(gridCell) {
         console.log($(gridCell).text());
-        // Except this cell, make others darkened 
+        $("#resetButton").show();
 
+        // Except this cell, make others darkened 
+        $(".noopGridCell").addClass("overlay");
+        $(".noopGridCell").removeClass("gridDetails");
+
+        $(gridCell).removeClass("overlay");
+        $(gridCell).addClass("gridDetails");
+
+    }
+
+    // Make all cells normal 
+    function resetGridCells() {
+        $(".noopGridCell").addClass("gridDetails");
+        $(".noopGridCell").removeClass("overlay");
+
+        $("#resetButton").hide();
     }
 
 </script>
