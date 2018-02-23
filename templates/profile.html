@@ -4,26 +4,75 @@
 <div class="container-fluid">
     <div class="row border">
       <div class="col-xs-3">
+        <!--
+        User Profile Sidebar by @keenthemes
+        A component of Metronic Theme - #1 Selling Bootstrap 3 Admin Theme in Themeforest: http://j.mp/metronictheme
+        Licensed under MIT
+        -->
+
+        <div class="container">
+            <div class="row profile">
+                <div class="col-md-3">
+                    <div class="profile-sidebar">
+                        <!-- SIDEBAR USERPIC -->
+                        <div class="profile-userpic">
+                            <img src="http://keenthemes.com/preview/metronic/theme/assets/admin/pages/media/profile/profile_user.jpg" class="img-responsive" alt="">
+                        </div>
+                        <!-- END SIDEBAR USERPIC -->
+                        <!-- SIDEBAR USER TITLE -->
+                        <div class="profile-usertitle">
+                            <div class="profile-usertitle-name">
+                                Marcus Doe
+                            </div>
+                            <div class="profile-usertitle-job">
+                                Developer
+                            </div>
+                        </div>
+                        <!-- END SIDEBAR USER TITLE -->
+                        <!-- SIDEBAR BUTTONS -->
+                        <div class="profile-userbuttons">
+                            <button type="button" class="btn btn-success btn-sm">Follow</button>
+                            <button type="button" class="btn btn-danger btn-sm">Message</button>
+                        </div>
+                        <!-- END SIDEBAR BUTTONS -->
+                        <!-- SIDEBAR MENU -->
+                        <div class="profile-usermenu">
+                            <ul class="nav">
+                                <li class="active">
+                                    <a href="#">
+                                    <i class="glyphicon glyphicon-home"></i>
+                                    Overview </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                    <i class="glyphicon glyphicon-user"></i>
+                                    Account Settings </a>
+                                </li>
+                                <li>
+                                    <a href="#" target="_blank">
+                                    <i class="glyphicon glyphicon-ok"></i>
+                                    Tasks </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                    <i class="glyphicon glyphicon-flag"></i>
+                                    Help </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- END MENU -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <p>
         <h1>Welcome {{ user_name }}!</h1>
         </p>
       </div>
+
       <div class="col-xs-6 border">
-        
-
-        <!-- <img id="blah" src="http://placehold.it/180" alt="your image" />
-        <input type='file' onchange="readURL(this);" />
-        
-
-        <div class="fileinput fileinput-new" data-provides="fileinput">
-          <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 150px;"></div>
-          <div>
-            <span class="btn btn-default btn-file"><span class="fileinput-new">Select image</span><span class="fileinput-exists">Change</span><input type="file" name="..."></span>
-            <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
-          </div>
-        </div>
- -->
-            
+                    
         <form action="/upload_glitz" id="formUploadGlitz" method="post" enctype="multipart/form-data">
             <div class="container-fluid">
                 <div class="row" id="imagePreviewWindow" style="display: none;">
@@ -53,10 +102,6 @@
                 
         </form>
 
-        
-        
-
-
         <!-- {glitz_id:(glitz_path, user_id, name, posted_on, [comment1, comment2,......, comment'n])} -->
         <!-- [glitz_path, glitz_id, count, user_id, name, posted_on] -->
         <table align="center" class="border">
@@ -84,12 +129,34 @@
             {% endfor %}
         </table>
 
-
+        <div class="text-center">
+            <nav>
+                <ul class="pagination pagination-sm">
+                    <!-- <li class="disabled"><a href="#">&laquo;Previous</a></li> -->
+                    <li>
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li>
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
       </div>
       <div class="col-xs-3">
       </div>
     </div>
 </div>
+
+
 
 <script type="text/javascript">
 
@@ -114,6 +181,7 @@
             reader.readAsDataURL(fileInputControl.files[0]);
         }
     }
+
 
 </script>
 
