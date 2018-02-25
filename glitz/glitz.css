@@ -6,6 +6,11 @@
   background-color: #cae2fa;
 }
 
+.bigGlitzItemBackground {
+  background-color: white;
+}
+
+
 .thumbnail {
     padding:0px;
 }
@@ -210,6 +215,10 @@ body {
 
 .border {
     border: solid 0px red;
+}
+
+.border2 {
+    border: solid 1px red;
 }
 
 body {

@@ -10,9 +10,9 @@
         Licensed under MIT
         -->
 
-        <div class="container">
+        <div class="container" data-spy="affix">
             <div class="row profile">
-                <div class="col-md-3">
+                <div class="col-xs-3">
                     <div class="profile-sidebar">
                         <!-- SIDEBAR USERPIC -->
                         <div class="profile-userpic">
@@ -91,10 +91,34 @@
             <input type="file" style="display: none;" onchange="showPicture(this);" name="glitzToUpload" id="fileToUpload"/>
                 
         </form>
+        <br/>
+        <div class="">
+            <div class="row">
+                <div class="col-xs-0"></div>
+                <div class="col-xs-10">
+                    {% for glitz in glitz_feeds %}
+                    <div class="container-fluid bigGlitzItemBackground">
+                        <div class="row">
+                            <a href="/{{ glitz[3] }}">  
+                               <b> {{ glitz[4] }} </b>
+                            </a>
+                        </div>
+                        <div class="row text-center">
+                            <a href="/view_glitz/{{ glitz[1] }}">
+                                <img src="{{ glitz[0] }}" class="glitz_image"> </br>
+                                {{ glitz[2]}} comments
+                            </a>                        
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="col-xs-1"></div>
+            </div>
+        </div>
 
         <!-- {glitz_id:(glitz_path, user_id, name, posted_on, [comment1, comment2,......, comment'n])} -->
         <!-- [glitz_path, glitz_id, count, user_id, name, posted_on] -->
-        <table align="center" class="border">
+        <!-- <table align="center" class="border">
            {% for glitz in glitz_feeds %}
             <tr>
                 <td>
@@ -117,7 +141,7 @@
             </tr>
             <tr><td>&nbsp;</td></tr>
             {% endfor %}
-        </table>
+        </table> -->
 
         <div class="text-center">
             <nav>
