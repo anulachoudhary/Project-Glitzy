@@ -1,3 +1,11 @@
+.bigImageBackground {
+  background-color: #191210;
+}
+
+.bigCommentsBackground {
+  background-color: #cae2fa;
+}
+
 .thumbnail {
     padding:0px;
 }
@@ -196,11 +204,11 @@ body {
 }
 
 .commentTextArea {
-    background-color: #B0B0B0;   
+    /*background-color: #B0B0B0;   */
 }
 
 .border {
-    border: solid 0.5px red;
+    border: solid 0px red;
 }
 
 body {
