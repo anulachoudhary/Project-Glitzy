@@ -17,7 +17,7 @@
     </div>
 
     <div class="row border" >
-        <div class="col-xs-8 border">
+        <div class="col-xs-7 border">
             <div class="container-fluid bg-overlay nopadding" style="background-image: url('../{{ glitz_details[0] }}');">
 
                 {% for i in range(4) %}
@@ -37,34 +37,62 @@
             </div>
             <!-- <img src="../{{ glitz_details[0] }}" > -->
         </div>
-        <div class="col-xs-4 border">
-          <div id="commentsDiv">
-            <table border=0 id="commentsTable">
+        <div class="col-xs-5 border">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <h3>Thoughts..</h3>
+                    </div><!-- /col-sm-12 -->
+                </div><!-- /row -->
                 {% for comment in glitz_comments %}
-                <tr>
-                    <td>{{ comment[2] }}</td>
-                    <td>&nbsp;</td>
-                    <td>{{ comment[0] }}</td>
-                </tr>
+                <div class="row">
+                    <div class="col-xs-1">
+                        <div class="thumbnail">
+                            <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
+                        </div><!-- /thumbnail -->
+                    </div><!-- /col-sm-1 -->    
+
+                    <div class="col-xs-4 nopadding">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <strong>{{ comment[2] }}</strong> <span class="text-muted">commented 5 days ago</span>
+                            </div>
+                            <div class="panel-body">
+                                {{ comment[0] }}
+                            </div><!-- /panel-body -->
+                        </div><!-- /panel panel-default -->
+                    </div><!-- /col-sm-5 -->
+                </div><!-- /row -->
                 {% endfor %}
-                <tr>
-                    <td>
-                        <form action="/save_comment" id= "saveCommentForm" method="POST">
-                            <input type="hidden" name="glitz_id" value="{{ glitz_details[1] }}">
-                            Comment:
-                            <textarea class="commentTextArea" rows="2" cols="30" id="commentTextArea" name="comment"></textarea>
-                            <br>
-                            <select name='select_grids'>
-                                {% for grid in grids %}
-                                <option value="{{ grid.grid_id }}">{{ grid.grid_name }}</option>
-                                {% endfor %}
-                            </select>
-                            <input type="button" id="saveCommentButton" value="Comment">
-                        </form>
-                    </td>
-                </tr>
-            </table>
-          </div>
+            </div><!-- /container -->
+
+            <div id="commentsDiv">
+                <table border=0 id="commentsTable">
+                    {% for comment in glitz_comments %}
+                    <tr>
+                        <td>{{ comment[2] }}</td>
+                        <td>&nbsp;</td>
+                        <td>{{ comment[0] }}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td>
+                            <form action="/save_comment" id= "saveCommentForm" method="POST">
+                                <input type="hidden" name="glitz_id" value="{{ glitz_details[1] }}">
+                                Comment:
+                                <textarea class="commentTextArea" rows="2" cols="30" id="commentTextArea" name="comment"></textarea>
+                                <br>
+                                <select name='select_grids'>
+                                    {% for grid in grids %}
+                                    <option value="{{ grid.grid_id }}">{{ grid.grid_name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <input type="button" id="saveCommentButton" value="Comment">
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </div>
