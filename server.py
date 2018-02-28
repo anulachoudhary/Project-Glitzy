@@ -57,9 +57,6 @@ def index():
                                 .order_by(desc(Glitz.posted_on))
                                 .all())
 
-    print glitz_feeds
-
-
 
     return render_template("profile.html", glitz_feeds=glitz_feeds
                            ,user_name=session.get("user_name", "User"))                                                   

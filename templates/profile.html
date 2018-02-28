@@ -106,7 +106,7 @@
                                 </div><!-- /thumbnail -->
                             </div>
                             <div class="col-xs-10">
-                                <a href="/{{ glitz[3] }}">  
+                                <a onclick="showProfileModal();">  
                                    <b> {{ glitz[4] }} </b>
                                 </a>
                                 <span class="text-muted"> posted few moments ago</span>
@@ -205,6 +205,10 @@
         }
     }
 
+    function showProfileModal() {
+        $("#modalProfileDialog").modal('show');
+
+    }
 
 </script>
 

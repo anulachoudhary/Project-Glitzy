@@ -55,6 +55,64 @@
 
     <!-- Body of Page -->
 
+    <div class="modal fade" id="modalDialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Oops!</h4>
+          </div>
+          <div class="modal-body bg-danger">
+            <p id="modalDangerMessage"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="modalProfileDialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="container" data-spy="affix">
+              <div class="row">
+                  <div class="col-xs-3">
+                      <div class="profile-sidebar">
+                          <!-- SIDEBAR USERPIC -->
+                          <div class="profile-userpic">
+                              <img src="https://scontent-sjc3-1.xx.fbcdn.net/v/t1.0-9/22405720_10154699510411829_1712623705371794204_n.jpg?oh=de704a6ea3758e2c7287e0271df2a60f&oe=5B4AB7AB" class="img-responsive" alt="">
+                          </div>
+                          <!-- END SIDEBAR USERPIC -->
+                          <!-- SIDEBAR USER TITLE -->
+                          <div class="profile-usertitle">
+                              <div class="profile-usertitle-name">
+                                  user_name 
+                              </div>
+                              <div class="profile-usertitle-job">
+                                  Fashion Fan!
+                              </div>
+                          </div>
+                          <!-- END SIDEBAR USER TITLE -->
+                          <!-- SIDEBAR MENU -->
+                          <div class="profile-usermenu">
+                              <ul class="nav">
+                                  <li>
+                                      <a href="#" target="_blank">
+                                      <i class="glyphicon glyphicon-leaf"></i>
+                                      My Glitz </a>
+                                  </li>
+                              </ul>
+                          </div>
+                          <!-- END MENU -->
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
 
 
     {% block content %} 
