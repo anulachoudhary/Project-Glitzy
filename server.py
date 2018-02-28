@@ -43,16 +43,21 @@ def index():
                                     ,func.count(Comment.comment_id)
                                     ,User.user_id
                                     ,(User.fname + ' ' + User.lname).label('name')
-                                    ,Glitz.posted_on)
+                                    ,Glitz.posted_on
+                                    ,Login.email)
                                 .outerjoin(User, User.user_id == Glitz.user_id)
                                 .outerjoin(Comment, Comment.glitz_id == Glitz.glitz_id)
+                                .outerjoin(Login, User.user_id == Login.user_id)
                                 .group_by(Glitz.glitz_path
                                           ,Glitz.glitz_id
                                           ,User.user_id
                                           ,'name'
-                                          ,Glitz.posted_on)
+                                          ,Glitz.posted_on
+                                          ,Login.email)
                                 .order_by(desc(Glitz.posted_on))
                                 .all())
+
+    print glitz_feeds
 
 
 
@@ -210,6 +215,7 @@ def view_glitz(glitz_id):
     # Using glitz_id, we need to fetch glitz data from DB
     grids = Grid.query.all()
 
+    print grids
     # # Glitz_User = aliased(User)
     # Comments_User = aliased(User)
 
@@ -228,12 +234,12 @@ def view_glitz(glitz_id):
                                 (Comment.comment_text
                                     ,Comment.user_id
                                     ,User.fname
-                                    ,Comment.commented_on)
+                                    ,Comment.commented_on
+                                    ,Comment.grid_id)
                                 .join(User, User.user_id == Comment.user_id)
                                 .filter(Comment.glitz_id == glitz_id)
                                 .order_by(Comment.commented_on)
                                 .all())
-
 
     # glitz_feeds = (db.session.query
     #                             (Glitz.glitz_path

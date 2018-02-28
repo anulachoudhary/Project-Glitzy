@@ -8,6 +8,16 @@
 
 .bigGlitzItemBackground {
   background-color: white;
+  margin-bottom: 20px;
+}
+
+.overlay {
+  display: none;
+  font-size: 0px;
+}
+
+#glitzContainer:hover .overlay {
+  display: block;
 }
 
 
@@ -56,6 +66,16 @@ body {
   margin: 20px 0;
 }
 
+.comments-profile-userpic {
+  float: none;
+  margin: 0 auto;
+  width: 70%;
+  height: 70%;
+  -webkit-border-radius: 30% !important;
+  -moz-border-radius: 30% !important;
+  border-radius: 30% !important;  
+}
+
 /* Profile sidebar */
 .profile-sidebar {
   padding: 20px 0 10px 0;
@@ -65,8 +85,8 @@ body {
 .profile-userpic img {
   float: none;
   margin: 0 auto;
-  width: 80%;
-  height: 80%;
+  width: 50%;
+  height: 50%;
   -webkit-border-radius: 30% !important;
   -moz-border-radius: 30% !important;
   border-radius: 30% !important;
@@ -183,9 +203,19 @@ body {
 .overlay {
     width: 100%;
     height: 100%;
-    background-color: gray;
+    /*background-color: lightgray;*/
     opacity: 0.4;
     cursor: pointer;        
+    border: solid 0.5px gray;
+    z-index: 50;
+}
+
+.selectedGridOverlay {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;        
+    border: solid 2px black;
+    z-index: 50; 
 }
 
 .gridDetails {
@@ -195,6 +225,7 @@ body {
     opacity: 0.2;
     text-align: center;
     cursor: pointer;
+    display: none;  
 }
 
 .glitz_image_grid_row {

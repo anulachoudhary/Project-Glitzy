@@ -3,7 +3,7 @@
 
 <div class="container-fluid">
     <div class="row border">
-      <div class="col-xs-3">
+      <div class="col-xs-4">
         <!--
         User Profile Sidebar by @keenthemes
         A component of Metronic Theme - #1 Selling Bootstrap 3 Admin Theme in Themeforest: http://j.mp/metronictheme
@@ -98,10 +98,19 @@
                 <div class="col-xs-10">
                     {% for glitz in glitz_feeds %}
                     <div class="container-fluid bigGlitzItemBackground">
+                        <br/>
                         <div class="row">
-                            <a href="/{{ glitz[3] }}">  
-                               <b> {{ glitz[4] }} </b>
-                            </a>
+                            <div class="col-xs-2">
+                                <div class="text-center">
+                                    <img class="comments-profile-userpic text-center" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
+                                </div><!-- /thumbnail -->
+                            </div>
+                            <div class="col-xs-10">
+                                <a href="/{{ glitz[3] }}">  
+                                   <b> {{ glitz[4] }} </b>
+                                </a>
+                                <span class="text-muted"> posted few moments ago</span>
+                            </div>
                         </div>
                         <div class="row text-center">
                             <a href="/view_glitz/{{ glitz[1] }}">
