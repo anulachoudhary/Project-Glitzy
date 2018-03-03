@@ -1,3 +1,23 @@
+.vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 100%;
+}
+
+.vertical-align-center {
+    /* To center vertically */
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.modal-content2 {
+    /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+    width:inherit;
+    height:inherit;
+    /* To center horizontally */
+    margin: 0 auto;
+}
+
 .bigImageBackground {
   background-color: #191210;
 }
@@ -214,7 +234,7 @@ body {
     width: 100%;
     height: 100%;
     cursor: pointer;        
-    border: solid 2px black;
+    border: solid 10px black;
     z-index: 50; 
 }
 
