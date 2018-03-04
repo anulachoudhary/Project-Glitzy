@@ -106,7 +106,7 @@
                                 </div><!-- /thumbnail -->
                             </div>
                             <div class="col-xs-10">
-                                <a onclick="showProfileModal();">  
+                                <a onclick="showProfileModal('{{ glitz[4] }}');">  
                                    <b> {{ glitz[4] }} </b>
                                 </a>
                                 <span class="text-muted"> posted few moments ago</span>
@@ -180,6 +180,62 @@
 </div>
 
 
+<div class="modal fade" id="modalProfileDialog" style="width: 100%; height: 100% border: solid 1px red;">
+  <div class="container-fluid">
+    <div class="row">
+      <div style="height:150px;">&nbsp;
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-5">
+      </div>
+      <div class="col-xs-3 nopadding">
+          <div class="modal-dialog" style="width:auto;">
+            <div class="modal-content">
+              <div class="text-center" data-spy="affix">
+                <div class="col-xs-12 nopadding">
+                    <div class="profile-sidebar">
+                        <!-- SIDEBAR USERPIC -->
+                        <div class="profile-userpic">
+                            <img id="userProfileModalDialogImage" src="https://scontent-sjc3-1.xx.fbcdn.net/v/t1.0-9/22405720_10154699510411829_1712623705371794204_n.jpg?oh=de704a6ea3758e2c7287e0271df2a60f&oe=5B4AB7AB" class="img-responsive" alt="">
+                        </div>
+                        <!-- END SIDEBAR USERPIC -->
+                        <!-- SIDEBAR USER TITLE -->
+                        <div class="profile-usertitle">
+                            <div class="profile-usertitle-name" id="userProfileModalDialogName">
+                                user_name 
+                            </div>
+                            <div class="profile-usertitle-job">
+                                Fashion Fan!
+                            </div>
+                        </div>
+                        <!-- END SIDEBAR USER TITLE -->
+                        <!-- SIDEBAR MENU -->
+                        <div class="profile-usermenu">
+                            <ul class="nav">
+                                <li class="active">
+                                    <a href="#">
+                                      <i class="glyphicon glyphicon-leaf"></i>
+                                    My Glitz </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- END MENU -->
+                    </div>
+                </div>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->        
+      </div>
+      <div class="col-xs-4">
+      </div>
+    </div>
+  </div>
+  
+</div><!-- /.modal -->
+
+
+
 
 <script type="text/javascript">
 
@@ -205,10 +261,11 @@
         }
     }
 
-    function showProfileModal() {
+    function showProfileModal(userName) {
         $("#modalProfileDialog").modal('show');
 
         // Send name and details to modal dialog
+        $("#userProfileModalDialogName").text(userName);
         // $("#modalDangerMessage").text(response.error);
         // $("#modalDialog").modal('show');
         // userProfileModalDialogImage

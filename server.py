@@ -212,7 +212,6 @@ def view_glitz(glitz_id):
     # Using glitz_id, we need to fetch glitz data from DB
     grids = Grid.query.all()
 
-    print grids
     # # Glitz_User = aliased(User)
     # Comments_User = aliased(User)
 

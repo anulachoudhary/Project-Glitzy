@@ -1,1 +1,53 @@
-Hi! My name is Anula. Today, I am going to talk about Glitzy. It's a social advicing platform.
+Intro: 
+Hi! My name is Anula. Today, I am going to talk about Glitzy.
+
+About project: 
+Glitzy is an immersive platform, to get candid advise and feedback on your 
+projects, from your social networks. This platform offers a unique feature of 
+commenting on different sections and areas of your picture - which makes this 
+effective for tons of use cases. Lets dive in!
+
+Tech deep dive: 
+Okay, let me first register. Oops! The user is already registered. In this case 
+browser made an AJAX request to the server and found out the database already 
+has this user info. This is a bootstrap modal window.
+
+After user logs-in, they get a complete user feeds experience. On this page 
+they can see all the Glitzes from their social network. Each feed item is 
+composed of data from - users, glitzes and comments tables.
+
+To prevent multiple roundtrips to the server, the queries have joins and 
+outerjoins to fetch data at once. I have also played around with various 
+column indexes, based on my query patterns. To keep the performance fast 
+I plan to implement materialized views and stored procedures.  
+
+Let’s check the Glitz page.
+On this page a user can experience two big features by hovering on the photo-
+- They can check the number of comments and can read the comments on each parts 
+  of the image
+- They can also write feedback by clicking on specific part of the image
+
+I learnt a lot about
+- css tips & tricks,
+- DOM events (onmouseover, onclick etc.) and
+- JavaScript.
+
+I implemented ajax requests wherever I could, and realized its impact on UI.
+Also, JavaScript has now my third favorite language (after PL-SQL and Python) :p
+
+
+Now, let me quickly post a new glitz.
+- this uses a combination of ajax upload requests and beautiful bootstrap components. 
+This allows you to preview your image before it is uploaded to the server.
+- an interesting challenge was to process images on the server, store them on disk 
+and then update the metadata in my Postgres DB.. All in a single transaction.
+
+
+Future work:
+-
+
+Conclusion: 
+So concluding, I learnt a lot in this project.
+- One of the interesting challenges was to chanelize my vision of hovering and 
+commenting on different parts of an image into reality - throughout browser, 
+server and database.
