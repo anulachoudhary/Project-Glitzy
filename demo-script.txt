@@ -22,32 +22,35 @@ column indexes, based on my query patterns. To keep the performance fast
 I plan to implement materialized views and stored procedures.  
 
 Let’s check the Glitz page.
-On this page a user can experience two big features by hovering on the photo-
-- They can check the number of comments and can read the comments on each parts 
+On this page a user can experience a couple of big features by hovering on the photo-
+ - They can check the number of comments, can read the comments on each parts 
   of the image
-- They can also write feedback by clicking on specific part of the image
+ - They can also write feedback by clicking on specific part of the image
+ - Azure vision APIs using machine learning algorithms to figure out details about the image. It gives us categorization tags about the image. With enough data, we can find relationships between image tags and people’s comments. 
+ e.g. for images tagged for ‘indoors’, users provide comments about watches, earings etc. 
+ e.g. for images tagged as ‘beach’,  users provide comments about shoes (edited)
 
 I learnt a lot about
-- css tips & tricks,
-- DOM events (onmouseover, onclick etc.) and
-- JavaScript.
+ - css tips & tricks,
+ - DOM events (onmouseover, onclick etc.) and
+ - JavaScript.
 
 I implemented ajax requests wherever I could, and realized its impact on UI.
 Also, JavaScript has now my third favorite language (after PL-SQL and Python) :p
 
 
 Now, let me quickly post a new glitz.
-- this uses a combination of ajax upload requests and beautiful bootstrap components. 
-This allows you to preview your image before it is uploaded to the server.
-- an interesting challenge was to process images on the server, store them on disk 
-and then update the metadata in my Postgres DB.. All in a single transaction.
+ - this uses a combination of ajax upload requests and beautiful bootstrap 
+ components. This allows you to preview your image before it is uploaded to the server.
+ - an interesting challenge was to process images on the server, store them on 
+ disk and then update the metadata in my Postgres DB.. All in a single transaction.
 
 
 Future work:
--
+ -
 
 Conclusion: 
 So concluding, I learnt a lot in this project.
-- One of the interesting challenges was to chanelize my vision of hovering and 
-commenting on different parts of an image into reality - throughout browser, 
-server and database.
+ - One of the interesting challenges was to chanelize my vision of hovering and 
+ commenting on different parts of an image into reality - throughout browser, 
+ server and database.
