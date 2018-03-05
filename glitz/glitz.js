@@ -98,8 +98,9 @@ function saveComment() {
             $("#commentTextArea").val(" ");
 
             // $("#commentsTable tbody").append("<tr><td>" + response.data.user_name + "</td><td>&nbsp;</td><td>" + response.data.comment + "</br></td></tr>");
-            $("#commentsDiv").append(response.data.user_name + ' ' + response.data.comment);
+            // $("#commentsDiv").append(response.data.user_name + ' ' + response.data.comment);
 
+            $("#commentsArea").append('<div class="commentRowForGridId{{ comment[4] }} noopCommentRow"><div class="col-xs-2 nopadding"><div class="text-center"><img class="comments-profile-userpic text-center" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png"></div></div><div class="col-xs-10"><div class="panel panel-default"><div class="panel-heading"><strong>' + response.data.user_name + '</strong> <span class="text-muted">commented moments ago</span></div><div class="panel-body">' + response.data.comment + '</div></div></div></div>');
             // if (response.status == true) {
             //     // Redirect to profile 
             //     window.location.href = response.data;

@@ -2,7 +2,7 @@
 {% block content %}
 
 <div class="container-fluid">
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-xs-1"></div>
         <div class="col-xs-5">
             <p>
@@ -11,12 +11,13 @@
                 </a>
             </p>
         </div>
-        <div class="col-xs-2">
-            <div class="resetButton" style="display: none" id="resetButton" onclick="resetGridCells()">Reset
-            </div>
+    </div> -->
+    <div class="row">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-6" id="imageProcessingTags" style="word-wrap: break-word;">
         </div>
     </div>
-
+    <div class="row">&nbsp;</div>
     <div class="row border" >
         <div class="col-xs-1 border"></div>
         <div class="col-xs-6 bigImageBackground">
@@ -40,7 +41,7 @@
             <!-- <img src="../{{ glitz_details[0] }}" > -->
         </div>
         <div class="col-xs-4 bigCommentsBackground">
-            <div class="">
+            <div class="" id="commentsArea">
                 <div class="row">
                     <div class="col-xs-2 nopadding">
                         <div class="text-center">
@@ -67,7 +68,6 @@
                         </div><!-- /panel panel-default -->
                     </div><!-- /col-sm-5 -->
                 </div><!-- /row -->
-
 
                 {% for comment in glitz_comments %}
                 <div class="commentRowForGridId{{ comment[4] }} noopCommentRow">
@@ -105,7 +105,6 @@
 <script type="text/javascript">
 
     var globalGridId = 2;
-
 
     $("#saveCommentButton").click(function(){
         // Invoke
@@ -258,9 +257,8 @@
 
         .done(function(data) {
             // Show formatted JSON on webpage.
-            $("#responseTextArea").val(JSON.stringify(data, null, 2));
-
-            console.log(JSON.stringify(data, null, 2));
+            // console.log(JSON.stringify(data, null, 2)); 
+            processResponse(data);
         })
 
         .fail(function(jqXHR, textStatus, errorThrown) {
@@ -271,10 +269,30 @@
         });
     };
 
+
+    function processResponse(dataFromAzure) {
+            
+        console.log(dataFromAzure);
+
+        jQuery.each(dataFromAzure.description.tags, function(i, val) {
+            // $("#" + i).append(document.createTextNode(" - " + val));
+            // $("#imageProcessingTags").append(' <b><span style="padding: 2px; margin: 5px;" class="label label-primary"> ' + val + ' </span></b> ');
+            // console.log(i + " " + val);
+
+            $("#imageProcessingTags").append('<button style="margin: 2px; text-transform: uppercase;" class="btn btn-primary btn-sm" type="button">' + val + '</button>');
+        });
+
+        // for (data in 5) { 
+            
+        //     '<span class="label label-primary">' + data + '</span>'
+        // }
+    }
+
+
     // Send image from public url
     processImage("https://raw.githubusercontent.com/anulachoudhary/Project-Glitzy/master/{{ glitz_details[0] }}");
-
     // getImageBlobAndProcess("http://localhost:5000/glitz/221098.max-620x600.jpg");
+
 </script>
 
 
