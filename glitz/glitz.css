@@ -365,9 +365,16 @@ body {
     text-transform: uppercase;
     border-color: #1CB94A;
 }
+
 .btn-register:hover,
 .btn-register:focus {
     color: #fff;
     background-color: #1CA347;
     border-color: #1CA347;
 }
+
+/*.container {
+    background: url(pattern.png) no-repeat center center;
+    background-color: red;
+    background-size: cover;
+}*/

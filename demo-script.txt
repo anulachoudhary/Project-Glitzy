@@ -26,16 +26,19 @@ On this page a user can experience a couple of big features by hovering on the p
  - They can check the number of comments, can read the comments on each parts 
   of the image
  - They can also write feedback by clicking on specific part of the image
- - Azure vision APIs using machine learning algorithms to figure out details about the image. It gives us categorization tags about the image. With enough data, we can find relationships between image tags and people’s comments. 
+ - Here i have used "Azure vision APIs" to figure out details about the image, 
+ using machine learning algorithms. It gives us categorization tags about the 
+ image. With enough data, we can find relationships between image tags and 
+ people’s comments. 
  e.g. for images tagged for ‘indoors’, users provide comments about watches, earings etc. 
- e.g. for images tagged as ‘beach’,  users provide comments about shoes (edited)
+ e.g. for images tagged as ‘beach’,  users provide comments about shoes, googles, hats
 
-I learnt a lot about
+Here while working on Glitz page, I have learnt a lot about
  - css tips & tricks,
  - DOM events (onmouseover, onclick etc.) and
  - JavaScript.
 
-I implemented ajax requests wherever I could, and realized its impact on UI.
+I have implemented ajax requests wherever I could, and realized its impact on UI.
 Also, JavaScript has now my third favorite language (after PL-SQL and Python) :p
 
 
